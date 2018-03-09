@@ -1,10 +1,14 @@
 package me.saferoute.saferouteapp;
 
+import android.content.Context;
+import android.graphics.Color;
+import android.media.Image;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.text.method.Touch;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -14,6 +18,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -48,12 +55,12 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         fragmentManager = getSupportFragmentManager();
-
         FragmentTransaction transation = fragmentManager.beginTransaction();
-
         transation.add(R.id.container, new MapsFragment(), "MapsFragment");
-
         transation.commitAllowingStateLoss();
+
+        this.configButtons();
+
     }
 
     @Override
@@ -113,5 +120,99 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    //configura os botões
+    private void configButtons() {
+        //Botões filtro
+        final LinearLayout linearLayout = (LinearLayout) findViewById(R.id.linearLayoutScrollFiltro);
+        final ImageView btnBicicleta = (ImageView) findViewById(R.id.btnBicicleta);
+        final ImageView btnCartao = (ImageView) findViewById(R.id.btnCartao);
+        final ImageView btnCel = (ImageView) findViewById(R.id.btnCel);
+        final ImageView btnDocumento = (ImageView) findViewById(R.id.btnDocumento);
+        final ImageView btnMochila = (ImageView) findViewById(R.id.btnMochila);
+        final ImageView btnMoney = (ImageView) findViewById(R.id.btnMoney);
+        final ImageView btnPc = (ImageView) findViewById(R.id.btnPc);
+        final ImageView btnPlus = (ImageView) findViewById(R.id.btnPlus);
+
+        btnBicicleta.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                for(int i = 0; i < linearLayout.getChildCount(); i++)
+                    ((ImageView)linearLayout.getChildAt(i)).setBackgroundColor(Color.TRANSPARENT);
+
+                view.setBackgroundColor(Color.rgb(100,100,100));
+            }
+        });
+
+        btnCartao.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                for(int i = 0; i < linearLayout.getChildCount(); i++)
+                    ((ImageView)linearLayout.getChildAt(i)).setBackgroundColor(Color.TRANSPARENT);
+
+                view.setBackgroundColor(Color.rgb(100,100,100));
+            }
+        });
+
+        btnCel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                for(int i = 0; i < linearLayout.getChildCount(); i++)
+                    ((ImageView)linearLayout.getChildAt(i)).setBackgroundColor(Color.TRANSPARENT);
+
+                view.setBackgroundColor(Color.rgb(100,100,100));
+            }
+        });
+
+        btnDocumento.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                for(int i = 0; i < linearLayout.getChildCount(); i++)
+                    ((ImageView)linearLayout.getChildAt(i)).setBackgroundColor(Color.TRANSPARENT);
+
+                view.setBackgroundColor(Color.rgb(100,100,100));
+            }
+        });
+
+        btnMochila.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                for(int i = 0; i < linearLayout.getChildCount(); i++)
+                    ((ImageView)linearLayout.getChildAt(i)).setBackgroundColor(Color.TRANSPARENT);
+
+                view.setBackgroundColor(Color.rgb(100,100,100));
+            }
+        });
+
+        btnMoney.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                for(int i = 0; i < linearLayout.getChildCount(); i++)
+                    ((ImageView)linearLayout.getChildAt(i)).setBackgroundColor(Color.TRANSPARENT);
+
+                view.setBackgroundColor(Color.rgb(100,100,100));
+            }
+        });
+
+        btnPc.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                for(int i = 0; i < linearLayout.getChildCount(); i++)
+                    ((ImageView)linearLayout.getChildAt(i)).setBackgroundColor(Color.TRANSPARENT);
+
+                view.setBackgroundColor(Color.rgb(100,100,100));
+            }
+        });
+
+        btnPlus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                for(int i = 0; i < linearLayout.getChildCount(); i++)
+                    ((ImageView)linearLayout.getChildAt(i)).setBackgroundColor(Color.TRANSPARENT);
+
+                view.setBackgroundColor(Color.rgb(100,100,100));
+            }
+        });
     }
 }

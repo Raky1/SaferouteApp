@@ -4,5 +4,5 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
     <color name="colorlaranja">#ff4300</color>
-    <color name="backgroundtransparent" >#7F000000</color>
+    <color name="backgroundtransparent" >#DD000000</color>
 </resources>
