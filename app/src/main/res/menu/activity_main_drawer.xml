@@ -3,26 +3,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn="navigation_view">
 
-    <!--
-    <group android:checkableBehavior="single">
+    <group android:checkableBehavior="none">
         <item
-            android:id="@+id/nav_camera"
-            android:icon="@drawable/ic_menu_camera"
-            android:title="Import" />
-        <item
-            android:id="@+id/nav_gallery"
-            android:icon="@drawable/ic_menu_gallery"
-            android:title="Gallery" />
-        <item
-            android:id="@+id/nav_slideshow"
-            android:icon="@drawable/ic_menu_slideshow"
-            android:title="Slideshow" />
-        <item
-            android:id="@+id/nav_manage"
-            android:icon="@drawable/ic_menu_manage"
-            android:title="Tools" />
+            android:id="@+id/nav_fui_roubado"
+            android:icon="@drawable/ic_menu_send"
+            android:title="Fui Roubado" />
     </group>
-    -->
 
     <!-- localizaçãoes -->
     <item android:title="Localizações">
@@ -37,5 +23,24 @@
                 android:title="Marcador Pessoal" />
         </menu>
     </item>
+
+    <!-- Outros -->
+    <item android:title="Informaões adicionais">
+        <menu>
+            <item
+                android:id="@+id/nav_dicas"
+                android:icon="@drawable/ic_menu_send"
+                android:title="Dica de Segurança" />
+            <item
+                android:id="@+id/nav_privacidade"
+                android:icon="@drawable/ic_menu_send"
+                android:title="Politica de Privacidade" />
+            <item
+                android:id="@+id/nav_sobre"
+                android:icon="@drawable/ic_menu_send"
+                android:title="Sobre" />
+        </menu>
+    </item>
+
 
 </menu>
