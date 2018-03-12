@@ -12,3 +12,4 @@
 .db
 app/google-services.json
 *.db
+app/src/debug/res/values/google_maps_api.xml
