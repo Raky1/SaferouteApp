@@ -10,3 +10,5 @@
 .externalNativeBuild
 /google-services.json
 .db
+app/google-services.json
+*.db
