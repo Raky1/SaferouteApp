@@ -38,7 +38,7 @@
             android:textColor="#000"
             android:background="@null"
             android:hint="Procure uma localização especifica"
-            android:imeOptions="actionDone"
+            android:imeOptions="actionSearch"
             android:singleLine="true"/>
 
     </RelativeLayout>
