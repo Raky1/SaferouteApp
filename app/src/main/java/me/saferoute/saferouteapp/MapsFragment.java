@@ -53,8 +53,6 @@ public class MapsFragment extends SupportMapFragment implements OnMapReadyCallba
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.getMapAsync(this);
-
-        hideSoftKeyboard();
     }
 
     //-----------------------------------------mapa carregado
@@ -86,8 +84,6 @@ public class MapsFragment extends SupportMapFragment implements OnMapReadyCallba
     private void moveCamera(LatLng latLng, float zoom) {
         Log.d(TAG, "moveCamera: moving the camera to : lat: " + latLng.latitude + ", lng: " + latLng.longitude);
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom));
-
-        hideSoftKeyboard();
     }
 
     //----------------------------------------------localização geografica
@@ -176,11 +172,6 @@ public class MapsFragment extends SupportMapFragment implements OnMapReadyCallba
                 }
             }
         }
-    }
-
-    //hidden search
-    private void hideSoftKeyboard() {
-        //this.getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
     }
 
     //-------------------------------------------propriedades

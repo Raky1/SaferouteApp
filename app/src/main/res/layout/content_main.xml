@@ -8,13 +8,13 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <RelativeLayout
         android:id="@+id/RelativeSearch"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_marginTop="10dp"
-        android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
+        android:layout_marginLeft="10dp"
         android:elevation="10dp"
         android:background="@drawable/white_border_search">
 
@@ -27,7 +27,7 @@
             android:layout_marginRight="5dp"
             android:src="@drawable/ic_search"/>
 
-        <TextView
+        <EditText
             android:id="@+id/txtSearch"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -39,7 +39,6 @@
             android:background="@null"
             android:hint="Procure uma localização especifica"
             android:imeOptions="actionSearch"/>
-
     </RelativeLayout>
 
     <ImageView
@@ -52,8 +51,6 @@
         android:layout_marginTop="10dp"
         android:scaleType="centerCrop"
         android:src="@drawable/ic_gps"/>
-
-
 
 </RelativeLayout>
 
