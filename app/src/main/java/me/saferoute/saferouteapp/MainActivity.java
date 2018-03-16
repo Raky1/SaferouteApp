@@ -1,36 +1,55 @@
 package me.saferoute.saferouteapp;
 
-import android.content.Context;
 import android.graphics.Color;
-import android.media.Image;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.text.method.Touch;
+import android.view.KeyEvent;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
+import android.view.inputmethod.EditorInfo;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Toast;
+import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    private MapsFragment mapsFragment;
     private FragmentManager fragmentManager;
+
+    private LinearLayout linearLayout;
+    private ImageView btnBicicleta, btnCartao, btnCel, btnDocumento, btnMochila, btnMoney, btnPc, btnPlus;
+    private ImageView btnGps;
+    private TextView txtSearch;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //searchs
+        txtSearch = (TextView) findViewById(R.id.txtSearch);
+        btnGps = (ImageView) findViewById(R.id.icon_gps);
+
+        //Botões filtro
+        linearLayout = (LinearLayout) findViewById(R.id.linearLayoutScrollFiltro);
+        btnBicicleta = (ImageView) findViewById(R.id.btnBicicleta);
+        btnCartao = (ImageView) findViewById(R.id.btnCartao);
+        btnCel = (ImageView) findViewById(R.id.btnCel);
+        btnDocumento = (ImageView) findViewById(R.id.btnDocumento);
+        btnMochila = (ImageView) findViewById(R.id.btnMochila);
+        btnMoney = (ImageView) findViewById(R.id.btnMoney);
+        btnPc = (ImageView) findViewById(R.id.btnPc);
+        btnPlus = (ImageView) findViewById(R.id.btnPlus);
+
+        init();
+
+        /* menu "..."
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -38,19 +57,46 @@ public class MainActivity extends AppCompatActivity
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
-        toggle.syncState();
+        toggle.syncState();*/
+    }
 
+    private void init() {
+        //Barra lateral de navegação...
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        fragmentManager = getSupportFragmentManager();
-        FragmentTransaction transation = fragmentManager.beginTransaction();
-        transation.add(R.id.container, new MapsFragment(), "MapsFragment");
-        transation.commitAllowingStateLoss();
-
         this.configButtons();
 
+        //set fragment Map
+        mapsFragment = new MapsFragment();
+        mapsFragment.setTxtSearch(txtSearch);
+        mapsFragment.setBtnGps(btnGps);
+
+        //change fragment
+        fragmentManager = getSupportFragmentManager();
+        FragmentTransaction transation = fragmentManager.beginTransaction();
+        transation.add(R.id.container, mapsFragment, "MapsFragment");
+        transation.commitAllowingStateLoss();
+
+        txtSearch.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int actionID, KeyEvent keyEvent) {
+                if (actionID == EditorInfo.IME_ACTION_SEARCH
+                        || actionID == EditorInfo.IME_ACTION_DONE
+                        || keyEvent.getAction() == KeyEvent.ACTION_DOWN
+                        || keyEvent.getAction() == KeyEvent.KEYCODE_ENTER) {
+                    //procura localização
+                    mapsFragment.geoLocate();
+                }
+
+                return false;
+            }
+        });
+
+
+
     }
+
 
     @Override
     public void onBackPressed() {
@@ -62,6 +108,7 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    /* menu "..." no canto
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -82,18 +129,18 @@ public class MainActivity extends AppCompatActivity
         }
 
         return super.onOptionsItemSelected(item);
-    }
+    }*/
 
-    @SuppressWarnings("StatementWithEmptyBody")
+    //@SuppressWarnings("StatementWithEmptyBody") // não sei pra que esta aqui...
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        /*
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
+
+        if (id == R.id.nav_personal) {
+            mapsFragment.getDeviceLocation();
+        }/* else if (id == R.id.nav_gallery) {
 
         } else if (id == R.id.nav_slideshow) {
 
@@ -113,22 +160,11 @@ public class MainActivity extends AppCompatActivity
 
     //configura os botões
     private void configButtons() {
-        //Botões filtro
-        final LinearLayout linearLayout = (LinearLayout) findViewById(R.id.linearLayoutScrollFiltro);
-        final ImageView btnBicicleta = (ImageView) findViewById(R.id.btnBicicleta);
-        final ImageView btnCartao = (ImageView) findViewById(R.id.btnCartao);
-        final ImageView btnCel = (ImageView) findViewById(R.id.btnCel);
-        final ImageView btnDocumento = (ImageView) findViewById(R.id.btnDocumento);
-        final ImageView btnMochila = (ImageView) findViewById(R.id.btnMochila);
-        final ImageView btnMoney = (ImageView) findViewById(R.id.btnMoney);
-        final ImageView btnPc = (ImageView) findViewById(R.id.btnPc);
-        final ImageView btnPlus = (ImageView) findViewById(R.id.btnPlus);
-
         btnBicicleta.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 for(int i = 0; i < linearLayout.getChildCount(); i++)
-                    ((ImageView)linearLayout.getChildAt(i)).setBackgroundColor(Color.TRANSPARENT);
+                    linearLayout.getChildAt(i).setBackgroundColor(Color.TRANSPARENT);
 
                 view.setBackgroundColor(Color.rgb(100,100,100));
             }
@@ -138,7 +174,7 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onClick(View view) {
                 for(int i = 0; i < linearLayout.getChildCount(); i++)
-                    ((ImageView)linearLayout.getChildAt(i)).setBackgroundColor(Color.TRANSPARENT);
+                    linearLayout.getChildAt(i).setBackgroundColor(Color.TRANSPARENT);
 
                 view.setBackgroundColor(Color.rgb(100,100,100));
             }
@@ -148,7 +184,7 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onClick(View view) {
                 for(int i = 0; i < linearLayout.getChildCount(); i++)
-                    ((ImageView)linearLayout.getChildAt(i)).setBackgroundColor(Color.TRANSPARENT);
+                    linearLayout.getChildAt(i).setBackgroundColor(Color.TRANSPARENT);
 
                 view.setBackgroundColor(Color.rgb(100,100,100));
             }
@@ -158,7 +194,7 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onClick(View view) {
                 for(int i = 0; i < linearLayout.getChildCount(); i++)
-                    ((ImageView)linearLayout.getChildAt(i)).setBackgroundColor(Color.TRANSPARENT);
+                    linearLayout.getChildAt(i).setBackgroundColor(Color.TRANSPARENT);
 
                 view.setBackgroundColor(Color.rgb(100,100,100));
             }
@@ -168,7 +204,7 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onClick(View view) {
                 for(int i = 0; i < linearLayout.getChildCount(); i++)
-                    ((ImageView)linearLayout.getChildAt(i)).setBackgroundColor(Color.TRANSPARENT);
+                    linearLayout.getChildAt(i).setBackgroundColor(Color.TRANSPARENT);
 
                 view.setBackgroundColor(Color.rgb(100,100,100));
             }
@@ -178,7 +214,7 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onClick(View view) {
                 for(int i = 0; i < linearLayout.getChildCount(); i++)
-                    ((ImageView)linearLayout.getChildAt(i)).setBackgroundColor(Color.TRANSPARENT);
+                    linearLayout.getChildAt(i).setBackgroundColor(Color.TRANSPARENT);
 
                 view.setBackgroundColor(Color.rgb(100,100,100));
             }
@@ -188,7 +224,7 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onClick(View view) {
                 for(int i = 0; i < linearLayout.getChildCount(); i++)
-                    ((ImageView)linearLayout.getChildAt(i)).setBackgroundColor(Color.TRANSPARENT);
+                    linearLayout.getChildAt(i).setBackgroundColor(Color.TRANSPARENT);
 
                 view.setBackgroundColor(Color.rgb(100,100,100));
             }
@@ -198,7 +234,7 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onClick(View view) {
                 for(int i = 0; i < linearLayout.getChildCount(); i++)
-                    ((ImageView)linearLayout.getChildAt(i)).setBackgroundColor(Color.TRANSPARENT);
+                    linearLayout.getChildAt(i).setBackgroundColor(Color.TRANSPARENT);
 
                 view.setBackgroundColor(Color.rgb(100,100,100));
             }

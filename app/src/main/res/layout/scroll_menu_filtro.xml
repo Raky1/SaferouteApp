@@ -14,56 +14,56 @@
             android:id="@+id/btnBicicleta"
             android:layout_width="@dimen/size_icon_filtro"
             android:layout_height="@dimen/size_icon_filtro"
-            android:src="@drawable/bicicleta"
+            android:src="@drawable/ic_bicicleta"
             android:padding="@dimen/padding_icon_filtro"/>
         <ImageView
             android:id="@+id/btnCartao"
             android:layout_width="@dimen/size_icon_filtro"
             android:layout_height="@dimen/size_icon_filtro"
             android:background="@null"
-            android:src="@drawable/cartao"
+            android:src="@drawable/ic_cartao"
             android:padding="@dimen/padding_icon_filtro"/>
         <ImageView
             android:id="@+id/btnCel"
             android:layout_width="@dimen/size_icon_filtro"
             android:layout_height="@dimen/size_icon_filtro"
             android:background="@null"
-            android:src="@drawable/cel"
+            android:src="@drawable/ic_cel"
             android:padding="@dimen/padding_icon_filtro"/>
         <ImageView
             android:id="@+id/btnDocumento"
             android:layout_width="@dimen/size_icon_filtro"
             android:layout_height="@dimen/size_icon_filtro"
             android:background="@null"
-            android:src="@drawable/documento"
+            android:src="@drawable/ic_documento"
             android:padding="@dimen/padding_icon_filtro"/>
         <ImageView
             android:id="@+id/btnMochila"
             android:layout_width="@dimen/size_icon_filtro"
             android:layout_height="@dimen/size_icon_filtro"
             android:background="@null"
-            android:src="@drawable/mochila"
+            android:src="@drawable/ic_mochila"
             android:padding="@dimen/padding_icon_filtro"/>
         <ImageView
             android:id="@+id/btnMoney"
             android:layout_width="@dimen/size_icon_filtro"
             android:layout_height="@dimen/size_icon_filtro"
             android:background="@null"
-            android:src="@drawable/money"
+            android:src="@drawable/ic_money"
             android:padding="@dimen/padding_icon_filtro"/>
         <ImageView
             android:id="@+id/btnPc"
             android:layout_width="@dimen/size_icon_filtro"
             android:layout_height="@dimen/size_icon_filtro"
             android:background="@null"
-            android:src="@drawable/pc"
+            android:src="@drawable/ic_pc"
             android:padding="@dimen/padding_icon_filtro"/>
         <ImageView
             android:id="@+id/btnPlus"
             android:layout_width="@dimen/size_icon_filtro"
             android:layout_height="@dimen/size_icon_filtro"
             android:background="@null"
-            android:src="@drawable/plus"
+            android:src="@drawable/ic_plus"
             android:padding="@dimen/padding_icon_filtro"/>
 
     </LinearLayout>

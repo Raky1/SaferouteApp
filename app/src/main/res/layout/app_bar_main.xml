@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context="me.saferoute.saferouteapp.MainActivity">
 
-    <!-- titulo -->
+    <!-- titulo
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -21,9 +21,7 @@
             app:popupTheme="@style/AppTheme.PopupOverlay" />
 
     </android.support.design.widget.AppBarLayout>
-
-    <!-- mapa -->
-    <include layout="@layout/content_main" />
+    -->
 
     <!-- icone flutuante de mensagem
     <android.support.design.widget.FloatingActionButton
@@ -34,6 +32,11 @@
         android:layout_margin="@dimen/fab_margin"
         app:srcCompat="@android:drawable/ic_dialog_email" />
     -->
+
+    <!-- mapa -->
+    <include
+        android:id="@+id/include"
+        layout="@layout/content_main" />
 
     <!-- scroll menu filtro -->
     <include

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/RelativeSearch"
+    android:layout_width="match_parent"
+    android:layout_height="50dp"
+    android:layout_marginTop="10dp"
+    android:layout_marginLeft="10dp"
+    android:layout_marginRight="10dp"
+    android:elevation="10dp"
+    android:background="@drawable/white_border_search">
+
+    <ImageView
+        android:id="@+id/iconSearch"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="5dp"
+        android:src="@drawable/ic_search"/>
+
+    <TextView
+        android:id="@+id/txtSearch"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_toRightOf="@id/iconSearch"
+        android:layout_centerVertical="true"
+        android:gravity="center_vertical"
+        android:textSize="15sp"
+        android:textColor="#000"
+        android:background="@null"
+        android:hint="Procure uma localização especifica"
+        android:textIsSelectable="true"
+        android:imeOptions="actionSearch"/>
+
+</RelativeLayout>
