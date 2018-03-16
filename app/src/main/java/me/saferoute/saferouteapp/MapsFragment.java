@@ -13,7 +13,6 @@ import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.ImageSwitcher;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -75,6 +74,7 @@ public class MapsFragment extends SupportMapFragment implements OnMapReadyCallba
                     != PackageManager.PERMISSION_GRANTED) {
                 return;
             }
+
             mMap.setMyLocationEnabled(true);
             mMap.getUiSettings().setMyLocationButtonEnabled(false);
         }
@@ -84,6 +84,8 @@ public class MapsFragment extends SupportMapFragment implements OnMapReadyCallba
     private void moveCamera(LatLng latLng, float zoom) {
         Log.d(TAG, "moveCamera: moving the camera to : lat: " + latLng.latitude + ", lng: " + latLng.longitude);
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom));
+
+        hideSoftKeyboard();
     }
 
     //----------------------------------------------localização geografica
@@ -102,8 +104,7 @@ public class MapsFragment extends SupportMapFragment implements OnMapReadyCallba
 
         if(list.size() > 0) {
             Address address = list.get(0);
-
-            moveCamera(new LatLng(address.getLatitude(), address.getLatitude()), DEFAULT_ZOOM);
+            moveCamera(new LatLng(address.getLatitude(), address.getLongitude()), 10);
         }
     }
 
@@ -172,6 +173,11 @@ public class MapsFragment extends SupportMapFragment implements OnMapReadyCallba
                 }
             }
         }
+    }
+
+    //esconde teclado... era pelo menos...
+    private void hideSoftKeyboard() {
+        this.getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
     }
 
     //-------------------------------------------propriedades
