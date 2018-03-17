@@ -12,6 +12,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.inputmethod.EditorInfo;
+import android.widget.AutoCompleteTextView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -25,7 +26,7 @@ public class MainActivity extends AppCompatActivity
     private LinearLayout linearLayout;
     private ImageView btnBicicleta, btnCartao, btnCel, btnDocumento, btnMochila, btnMoney, btnPc, btnPlus;
     private ImageView btnGps;
-    private TextView txtSearch;
+    private AutoCompleteTextView txtSearch;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,7 +34,7 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
 
         //searchs
-        txtSearch = (TextView) findViewById(R.id.txtSearch);
+        txtSearch = (AutoCompleteTextView) findViewById(R.id.txtSearch);
         btnGps = (ImageView) findViewById(R.id.icon_gps);
 
         //Botões filtro
@@ -77,24 +78,6 @@ public class MainActivity extends AppCompatActivity
         FragmentTransaction transation = fragmentManager.beginTransaction();
         transation.add(R.id.container, mapsFragment, "MapsFragment");
         transation.commitAllowingStateLoss();
-
-        txtSearch.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView textView, int actionID, KeyEvent keyEvent) {
-                if (actionID == EditorInfo.IME_ACTION_SEARCH
-                        || actionID == EditorInfo.IME_ACTION_DONE
-                        || keyEvent.getAction() == KeyEvent.ACTION_DOWN
-                        || keyEvent.getAction() == KeyEvent.KEYCODE_ENTER) {
-                    //procura localização
-                    mapsFragment.geoLocate();
-                }
-
-                return false;
-            }
-        });
-
-
-
     }
 
 

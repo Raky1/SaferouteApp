@@ -11,19 +11,28 @@ import android.support.v4.app.ActivityCompat;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.inputmethod.EditorInfo;
+import android.widget.AutoCompleteTextView;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.places.GeoDataApi;
+import com.google.android.gms.location.places.GeoDataClient;
+import com.google.android.gms.location.places.Places;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
@@ -33,19 +42,25 @@ import java.util.List;
 
 import static android.content.ContentValues.TAG;
 
-public class MapsFragment extends SupportMapFragment implements OnMapReadyCallback {
+public class MapsFragment extends SupportMapFragment implements OnMapReadyCallback,
+    GoogleApiClient.OnConnectionFailedListener {
 
     private static final String FINE_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION;
     private static final String COARSE_LOCATION = Manifest.permission.ACCESS_COARSE_LOCATION;
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1234;
     private static final float DEFAULT_ZOOM = 18f;
+    private static final LatLngBounds LAT_LNG_BOUNDS = new LatLngBounds(
+            new LatLng(-85, -180),
+            new LatLng(85, 180));
 
     private GoogleMap mMap;
     private boolean mLocationPermissionGranted = false;
     private FusedLocationProviderClient mFusedLocationProviderClient;
     private LocationManager mLocationManager;
+    private PlaceAutoCompleteAdapter mPlaceAutoCompleteAdapter;
+    private GeoDataClient mGeoDataClient;
 
-    private TextView txtSearch;
+    private AutoCompleteTextView txtSearch;
     private ImageView btnGps;
 
     @Override
@@ -64,6 +79,13 @@ public class MapsFragment extends SupportMapFragment implements OnMapReadyCallba
         //permissão
         getLocationPermission();
 
+        // auto complete do search
+        mGeoDataClient = Places.getGeoDataClient(this.getContext(), null);
+        mPlaceAutoCompleteAdapter = new PlaceAutoCompleteAdapter(this.getContext(),
+                mGeoDataClient, LAT_LNG_BOUNDS, null);
+
+        txtSearch.setAdapter(mPlaceAutoCompleteAdapter);
+
         //ativando o botão de localização e se localizando....
         if (mLocationPermissionGranted) {
             getDeviceLocation();
@@ -78,6 +100,12 @@ public class MapsFragment extends SupportMapFragment implements OnMapReadyCallba
             mMap.setMyLocationEnabled(true);
             mMap.getUiSettings().setMyLocationButtonEnabled(false);
         }
+    }
+
+    //verifica se google api falha
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+        Log.d(TAG, "onConnectionFailed: falha");
     }
 
     //-----------------------------------------------move camera
@@ -181,8 +209,23 @@ public class MapsFragment extends SupportMapFragment implements OnMapReadyCallba
     }
 
     //-------------------------------------------propriedades
-    public void setTxtSearch(TextView txtSearch) {
+    public void setTxtSearch(AutoCompleteTextView txtSearch) {
         this.txtSearch = txtSearch;
+        txtSearch.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int actionID, KeyEvent keyEvent) {
+                if (actionID == EditorInfo.IME_ACTION_SEARCH
+                        || actionID == EditorInfo.IME_ACTION_DONE
+                        || keyEvent.getAction() == KeyEvent.ACTION_DOWN
+                        || keyEvent.getAction() == KeyEvent.KEYCODE_ENTER) {
+
+                    //procura localização
+                    geoLocate();
+                }
+
+                return false;
+            }
+        });
     }
 
     public void setBtnGps(ImageView btnGps) {
