@@ -13,3 +13,5 @@ app/google-services.json
 *.db
 app/src/debug/res/values/google_maps_api.xml
 app/src/main/java/me/saferoute/saferouteapp/DAO/DataBase.java
+.idea/caches/build_file_checksums.ser
+.idea/codeStyles/Project.xml
