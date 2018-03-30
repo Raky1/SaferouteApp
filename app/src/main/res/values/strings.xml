@@ -25,6 +25,7 @@
     <string name="login_logar">Logar</string>
 
     <!-- Ocorrencia Dialog -->
+    <string name="ocorrencia_titulo">Dados da Ocorrência</string>
     <string name="ocorrencia_dia">Dia: </string>
     <string name="ocorrencia_hora">Hora: </string>
     <string name="ocorrencia_tipo">Tipo: </string>
@@ -42,41 +43,5 @@
         <item>Não</item>
     </string-array>
     <string name="ocorrencia_registrar">Registrar</string>
-
-    <!-- Dicas Dialog -->
-    <string name="dicas_texto">
-        Dicas, dicas e mais dicas\n
-        Dicas, dicas e mais dicas\n
-        Dicas, dicas e mais dicas\n
-        Dicas, dicas e mais dicas\n
-        Dicas, dicas e mais dicas\n
-        Dicas, dicas e mais dicas\n
-        Dicas, dicas e mais dicas\n
-        Dicas, dicas e mais dicas
-    </string>
-
-    <!-- Privacidade Dialog -->
-    <string name="privacidade_texto">
-        Privacidade, Privacidade e mais Privacidade\n
-        Privacidade, Privacidade e mais Privacidade\n
-        Privacidade, Privacidade e mais Privacidade\n
-        Privacidade, Privacidade e mais Privacidade\n
-        Privacidade, Privacidade e mais Privacidade\n
-        Privacidade, Privacidade e mais Privacidade\n
-        Privacidade, Privacidade e mais Privacidade\n
-        Privacidade, Privacidade e mais Privacidade
-    </string>
-
-    <!-- Sobre Dialog -->
-    <string name="sobre_texto">
-        Sobre, Sobre e mais Sobre\n
-        Sobre, Sobre e mais Sobre\n
-        Sobre, Sobre e mais Sobre\n
-        Sobre, Sobre e mais Sobre\n
-        Sobre, Sobre e mais Sobre\n
-        Sobre, Sobre e mais Sobre\n
-        Sobre, Sobre e mais Sobre\n
-        Sobre, Sobre e mais Sobre
-    </string>
 
 </resources>

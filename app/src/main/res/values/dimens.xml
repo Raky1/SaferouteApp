@@ -7,4 +7,9 @@
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="padding_icon_filtro">15dp</dimen>
     <dimen name="size_icon_filtro">55dp</dimen>
+
+
+    <dimen name="text_title_size">25sp</dimen>
+    <dimen name="text_type_size">20sp</dimen>
+    <dimen name="text_info_size">15sp</dimen>
 </resources>

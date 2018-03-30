@@ -1,6 +1,9 @@
 package me.saferoute.saferouteapp;
 
+import android.content.Context;
 import android.graphics.Color;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -30,21 +33,19 @@ import me.saferoute.saferouteapp.Tools.Validacao;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    //Login
+    //Login persist
     private Usuario user = null;
-
-
 
     private MapsFragment mapsFragment;
     private FragmentManager fragmentManager;
 
-    //scroll and map
+    //scroll and mapbtn
     private LinearLayout linearLayout;
     private ImageView btnBicicleta, btnCartao, btnCel, btnDocumento, btnMochila, btnMoney, btnPc, btnPlus;
     private ImageView btnGps;
     private AutoCompleteTextView txtSearch;
 
-    //Dialog
+    //Dialogs
     private AlertDialog dialogLogin, dialogOcorrencia, dialogDicas, dialogPrivacidade, dialogSobre;
 
     //login screen
@@ -62,6 +63,12 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //Verifica conectividade com internet
+        ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+        if(networkInfo == null || !networkInfo.isConnected())
+            finish();
 
         //searchs
         txtSearch = (AutoCompleteTextView) findViewById(R.id.txtSearch);
@@ -118,6 +125,7 @@ public class MainActivity extends AppCompatActivity
             public void onClick(View view) {
                 if(Validacao.CheckEmail(txtEmail_login.getText().toString())) {
                     if (Validacao.CheckSenha(txtSenha_login.getText().toString())) {
+
                         dialogLogin.dismiss();
                     } else {
                         txtSenha_login.requestFocus();
@@ -179,6 +187,9 @@ public class MainActivity extends AppCompatActivity
         view = getLayoutInflater().inflate(R.layout.dialog_sobre, null);
         builder.setView(view);
         dialogSobre = builder.create();
+
+        //****************************************************************************************************************************
+
     }
 
 

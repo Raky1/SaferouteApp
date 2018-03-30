@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="dicas_titulo">DICAS DE SEGURANÇA</string>
+    <string name="dicas_texto">
+        - Mantenha sempre janelas, portas e varandas fechadas e trancadas quando não estiver no cômodo (Impreterivelmente se for no térreo).
+
+        - Em casa, deixe itens de valor sempre perto de você ou em locais mais escondidos (NÃO em cima da mesa da sala de jantar por exemplo) pra evitar açoes rápidas. Quando for sair o dia todo, coloque dentro do guarda roupa ou embaixo da cama. Alguns minutos podem ser a diferença de você recuperar ou não o seu item.
+        \n\n- Mantenha seu IMEI e IDs de eletronicos anotados em algum lugar pra ser fácil o bloqueio e/ou identificação, tire uma foto da etiqueta se puder, e bloqueie o celular pelo IMEI na operadora, não adianta por muito tempo mas já enxe o saco do meliante.
+        \n\n- Se comprou algum item absurdamente caro (tipo notebook de ultima geração) e ele não fica em constante ambiente seguro (dentro de casa num quarto isolado do mundo rs) considere fazer o seguro dele para que uma possivel perda seja menos catastrófica financeiramente.
+        \n\n- Instalem e configurem Dropbox, BoxSync ou Google Drive e salve seus arquivos importantes, principalmente de projetos acadêmicos, na nuvem pra não perder aquilo que não pode ser comprado nunca mais.
+        \n\n- Carro: estacionado dentro da garagem, ou locais movimentos, iluminados, perto de onde você está para poder ouvir o barulho, dê uma checadinha nele de vez em quando, não só na hora de ir embora.
+        \n\n- Carro 2: NUNCA deixe itens à vista pelo vidro. Pode ser uma mochila vazia, ele vai achar que tem algo importante e pode arrombar, não leva nada mas já dá preju. Tire tudo de vista, coloque no porta mala no mínimo, e de preferência não leve, principalmente se vc sabe que o carro vai ficar sozinho muito tempo. Em grandes eventos combine carona, vá de bus, e se for de carro tire tudo que puder dele pra diminuir os prejuizos caso alguem arrombe.
+        \n\n- Carro 3: Se alguém jogar algo no vidro, evite acionar o para brisa ou a água pois pode piorar a visibilidade. Não pare e ande até um posto ou outro local seguro pra limpar.
+        \n\n- Bicicletas: Sempre presas a algum lugar, mesmo em casa, de preferência fora da vista do portão. Se você tem controle sobre o portão eletronico da casa, cogite colocar um cadeado durante a noite para evitar que eles forcem e abram, você perde uns minutos de manhã mas vai dormir mais tranquilo.
+        \n\n- Meninas (e meninos tbm, por que não?) comprem spray de gengibre ou pimenta e mantenha fácil no bolso enquanto estiverem andando na rua. Sob qualquer suspeita mude de lado da rua, altere o caminho, entre em algum comércio, puxe papo com um desconhecido na rua pra se agrupar (alguém seguro que tá andando perto de vc) e se precisar mete o spray na cara do fdp pra vc poder correr (se ele não estiver apontando uma arma de fogo pra vc, certamente).
+        \n\n- Deem uma olhada na net sobre defesa pessoal, se possivel façam algumas aulas pra aprender o básico de como se defender numa abordagem corporal e poder fugir.
+        \n\n- Se estiver com itens de valor na bolsa, repense se não vale a pena esperar uma carona ou pagar o bus mesmo, em vez de se arriscar voltando a pé.
+    </string>
+
+    <string name="privacidade_titulo">POLÍTICA DE PRIVACIDADE</string>
+    <string name="privacidade_texto">
+        As informações registradas pelos usuários serão utilizadas no auxílio das autoridades para que esses possam estar cientes dos lugares em que as ocorrências de furtos, roubos e outros são realizadas com mais frequência. Todos os dados serão mantidos em total sígilo. O SAFEROUTE irá fornecer apenas os dados que ajudem a mapear as regiões, tais como irá ajudar no reconhecimento das pessoas que estão por trás desses delitos. O dados serão tratados de acordo com a Lei de Proteção de Dados Pessoais de 26 outubro de 1998 (Lei n.º 67/98). As informações pessoais podem incluir nome, e-mail, endereço, telefone, e outros, caso esses sejam citados pelo usuário do site. O Saferoute reserva-se o direito de alteração deste acordo sem aviso prévio.
+    </string>
+
+    <string name="sobre_titulo">SAFEROUTE</string>
+    <string name="sobre_texto">Mapeamento online de crimes que ocorrem na sua cidade</string>
+
+</resources>

@@ -12,19 +12,32 @@
         android:scrollbarAlwaysDrawVerticalTrack="true"
         android:scrollbars="vertical">
 
+        <!-- Titulo -->
+        <TextView
+            android:id="@+id/ocorrencia_titulo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/text_title_size"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="5dp"
+            android:text="@string/ocorrencia_titulo"
+            android:layout_centerHorizontal="true"/>
+
         <!-- Dia -->
         <TextView
             android:id="@+id/txtview_dia"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_below="@+id/ocorrencia_titulo"
             android:text="@string/ocorrencia_dia"
-            android:textSize="20sp"/>
+            android:textSize="@dimen/text_type_size"/>
 
         <DatePicker
             android:id="@+id/datePicker"
             android:layout_width="match_parent"
             android:layout_height="110dp"
             android:layout_toEndOf="@+id/txtview_dia"
+            android:layout_below="@+id/ocorrencia_titulo"
             android:calendarViewShown="false"
             android:datePickerMode="spinner"
             android:spinnersShown="true" />
@@ -36,7 +49,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/datePicker"
             android:text="@string/ocorrencia_hora"
-            android:textSize="20sp" />
+            android:textSize="@dimen/text_type_size"/>
 
         <TimePicker
             android:id="@+id/timePicker"
@@ -54,7 +67,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/timePicker"
             android:text="@string/ocorrencia_tipo"
-            android:textSize="20sp" />
+            android:textSize="@dimen/text_type_size"/>
 
         <Spinner
             android:id="@+id/spinnerTipo"
@@ -72,7 +85,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/spinnerTipo"
             android:text="@string/ocorrencia_pertences"
-            android:textSize="20sp" />
+            android:textSize="@dimen/text_type_size"/>
 
         <EditText
             android:id="@+id/txtPertences"
@@ -89,7 +102,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/txtPertences"
             android:text="@string/ocorrencia_boletim"
-            android:textSize="20sp" />
+            android:textSize="@dimen/text_type_size"/>
 
         <Spinner
             android:id="@+id/spinnerBoletim"
@@ -107,7 +120,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/spinnerBoletim"
             android:text="@string/ocorrencia_agrecao"
-            android:textSize="20sp" />
+            android:textSize="@dimen/text_type_size"/>
 
         <Spinner
             android:id="@+id/spinnerAgrecao"
@@ -125,7 +138,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/spinnerAgrecao"
             android:text="@string/ocorrencia_complemento"
-            android:textSize="20sp" />
+            android:textSize="@dimen/text_type_size"/>
 
         <EditText
             android:id="@+id/txtComplemento"
