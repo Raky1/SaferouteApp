@@ -5,9 +5,13 @@
 
     <group android:checkableBehavior="none">
         <item
+            android:id="@+id/nav_logar"
+            android:icon="@drawable/ic_menu_send"
+            android:title="@string/nav_logar" />
+        <item
             android:id="@+id/nav_fui_roubado"
             android:icon="@drawable/ic_menu_send"
-            android:title="Fui Roubado" />
+            android:title="@string/nav_fui_roubado" />
     </group>
 
     <!-- localizaçãoes -->
@@ -16,11 +20,11 @@
             <item
                 android:id="@+id/nav_personal"
                 android:icon="@drawable/ic_personalmarker"
-                android:title="Local Atual" />
+                android:title="@string/nav_personal" />
             <item
                 android:id="@+id/nav_home"
                 android:icon="@drawable/ic_homemarker"
-                android:title="Marcador Pessoal" />
+                android:title="@string/nav_home" />
         </menu>
     </item>
 
@@ -30,15 +34,15 @@
             <item
                 android:id="@+id/nav_dicas"
                 android:icon="@drawable/ic_menu_send"
-                android:title="Dica de Segurança" />
+                android:title="@string/nav_dicas" />
             <item
                 android:id="@+id/nav_privacidade"
                 android:icon="@drawable/ic_menu_send"
-                android:title="Politica de Privacidade" />
+                android:title="@string/nav_privacidade" />
             <item
                 android:id="@+id/nav_sobre"
                 android:icon="@drawable/ic_menu_send"
-                android:title="Sobre" />
+                android:title="@string/nav_sobre" />
         </menu>
     </item>
 

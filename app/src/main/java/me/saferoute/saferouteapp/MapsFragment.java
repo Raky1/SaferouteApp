@@ -15,6 +15,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AutoCompleteTextView;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -53,12 +54,14 @@ public class MapsFragment extends SupportMapFragment implements OnMapReadyCallba
             new LatLng(-85, -180),
             new LatLng(85, 180));
 
+
     private GoogleMap mMap;
     private boolean mLocationPermissionGranted = false;
     private FusedLocationProviderClient mFusedLocationProviderClient;
     private LocationManager mLocationManager;
     private PlaceAutoCompleteAdapter mPlaceAutoCompleteAdapter;
     private GeoDataClient mGeoDataClient;
+
 
     private AutoCompleteTextView txtSearch;
     private ImageView btnGps;
@@ -112,6 +115,8 @@ public class MapsFragment extends SupportMapFragment implements OnMapReadyCallba
     private void moveCamera(LatLng latLng, float zoom) {
         Log.d(TAG, "moveCamera: moving the camera to : lat: " + latLng.latitude + ", lng: " + latLng.longitude);
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom));
+
+        //txtSearch.clearFocus();
 
         hideSoftKeyboard();
     }
@@ -205,11 +210,12 @@ public class MapsFragment extends SupportMapFragment implements OnMapReadyCallba
 
     //esconde teclado... era pelo menos...
     private void hideSoftKeyboard() {
-        this.getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+        InputMethodManager imm = (InputMethodManager)this.getContext().getSystemService(this.getContext().INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(txtSearch.getWindowToken(), 0);
     }
 
     //-------------------------------------------propriedades
-    public void setTxtSearch(AutoCompleteTextView txtSearch) {
+    public void setTxtSearch(final AutoCompleteTextView txtSearch) {
         this.txtSearch = txtSearch;
         txtSearch.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override

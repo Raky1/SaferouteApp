@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="10dp"
+        android:scrollbarAlwaysDrawVerticalTrack="true"
+        android:scrollbars="vertical">
+
+        <!-- Dia -->
+        <TextView
+            android:id="@+id/txtview_dia"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/ocorrencia_dia"
+            android:textSize="20sp"/>
+
+        <DatePicker
+            android:id="@+id/datePicker"
+            android:layout_width="match_parent"
+            android:layout_height="110dp"
+            android:layout_toEndOf="@+id/txtview_dia"
+            android:calendarViewShown="false"
+            android:datePickerMode="spinner"
+            android:spinnersShown="true" />
+
+        <!-- Hora -->
+        <TextView
+            android:id="@+id/txtview_hora"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/datePicker"
+            android:text="@string/ocorrencia_hora"
+            android:textSize="20sp" />
+
+        <TimePicker
+            android:id="@+id/timePicker"
+            android:layout_width="match_parent"
+            android:layout_height="110dp"
+            android:layout_alignParentEnd="true"
+            android:layout_below="@+id/datePicker"
+            android:layout_toEndOf="@+id/txtview_hora"
+            android:timePickerMode="spinner" />
+
+        <!-- Tipo -->
+        <TextView
+            android:id="@+id/txtview_tipo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/timePicker"
+            android:text="@string/ocorrencia_tipo"
+            android:textSize="20sp" />
+
+        <Spinner
+            android:id="@+id/spinnerTipo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="10dp"
+            android:layout_below="@+id/timePicker"
+            android:layout_toEndOf="@+id/txtview_tipo"/>
+
+        <!-- pertences -->
+        <TextView
+            android:id="@+id/txtview_pertences"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/spinnerTipo"
+            android:text="@string/ocorrencia_pertences"
+            android:textSize="20sp" />
+
+        <EditText
+            android:id="@+id/txtPertences"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:gravity="top"
+            android:layout_below="@+id/spinnerTipo"
+            android:layout_toEndOf="@+id/txtview_pertences"/>
+
+        <!-- boletim -->
+        <TextView
+            android:id="@+id/txtview_boletim"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/txtPertences"
+            android:text="@string/ocorrencia_boletim"
+            android:textSize="20sp" />
+
+        <Spinner
+            android:id="@+id/spinnerBoletim"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="10dp"
+            android:layout_below="@+id/txtPertences"
+            android:layout_toEndOf="@+id/txtview_boletim"/>
+
+        <!-- Agreção -->
+        <TextView
+            android:id="@+id/txtview_agrecao"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/spinnerBoletim"
+            android:text="@string/ocorrencia_agrecao"
+            android:textSize="20sp" />
+
+        <Spinner
+            android:id="@+id/spinnerAgrecao"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="10dp"
+            android:layout_below="@+id/spinnerBoletim"
+            android:layout_toEndOf="@+id/txtview_agrecao"/>
+
+        <!-- Complemento -->
+        <TextView
+            android:id="@+id/txtview_complemento"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/spinnerAgrecao"
+            android:text="@string/ocorrencia_complemento"
+            android:textSize="20sp" />
+
+        <EditText
+            android:id="@+id/txtComplemento"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:gravity="top"
+            android:layout_below="@+id/spinnerAgrecao"
+            android:layout_toEndOf="@+id/txtview_complemento"/>
+
+        <Button
+            android:id="@+id/btnRegistrar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/ocorrencia_registrar"
+            android:layout_below="@id/txtComplemento"/>
+
+    </RelativeLayout>
+</ScrollView>
