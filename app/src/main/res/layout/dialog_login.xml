@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:id="@+id/linearLayoutLogin"
     android:orientation="vertical"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center_vertical"
+    android:background="@drawable/white_border_activity_popup"
     android:padding="10dp">
 
     <TextView
@@ -35,5 +38,15 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:text="@string/login_logar"/>
+
+    <TextView
+        android:id="@+id/linkCadastrar"
+        android:layout_marginTop="15dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="@string/login_cadastrar"
+        android:textSize="12dp"
+        android:textColor="@color/link"/>
 
 </LinearLayout>

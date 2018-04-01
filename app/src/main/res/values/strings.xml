@@ -9,7 +9,7 @@
 
     <!-- Menu Drawer View-->
     <string name="nav_logar">Logar</string>
-    <string name="nav_logado">Logado</string>
+    <string name="nav_logado">Encerrar Sessão</string>
 
     <string name="nav_fui_roubado">Fui Roubado</string>
     <string name="nav_personal">Local Atual</string>
@@ -18,11 +18,20 @@
     <string name="nav_privacidade">Politicas de Privacidade</string>
     <string name="nav_sobre">Sobre</string>
 
+    <!-- Cadastro Dialog -->
+    <string name="cadastro_titulo">Cadastro</string>
+    <string name="cadastro_email">Email</string>
+    <string name="cadastro_senha">Senha</string>
+    <string name="cadastro_genero">Genero:</string>
+    <string name="cadastro_data_nasc">Data de Nascimento: </string>
+    <string name="cadastro_cadastrar">Cadastrar</string>
+
     <!-- Login Dialog -->
     <string name="login_login">Login</string>
     <string name="login_email">Email </string>
     <string name="login_senha">Senha </string>
     <string name="login_logar">Logar</string>
+    <string name="login_cadastrar">Não está cadastrado? Cadastre-se!</string>
 
     <!-- Ocorrencia Dialog -->
     <string name="ocorrencia_titulo">Dados da Ocorrência</string>

@@ -75,7 +75,7 @@ public class MapsFragment extends SupportMapFragment implements OnMapReadyCallba
     //-----------------------------------------mapa carregado
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        Log.d(TAG, "onMapReady: OK");
+        Log.d("INFO", "onMapReady: OK");
 
         mMap = googleMap;
 
@@ -87,7 +87,11 @@ public class MapsFragment extends SupportMapFragment implements OnMapReadyCallba
         mPlaceAutoCompleteAdapter = new PlaceAutoCompleteAdapter(this.getContext(),
                 mGeoDataClient, LAT_LNG_BOUNDS, null);
 
-        txtSearch.setAdapter(mPlaceAutoCompleteAdapter);
+        try {
+            txtSearch.setAdapter(mPlaceAutoCompleteAdapter);
+        } catch (Exception e) {
+            Log.d("ERROR", e.getMessage());
+        }
 
         //ativando o botão de localização e se localizando....
         if (mLocationPermissionGranted) {
@@ -108,12 +112,12 @@ public class MapsFragment extends SupportMapFragment implements OnMapReadyCallba
     //verifica se google api falha
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        Log.d(TAG, "onConnectionFailed: falha");
+        Log.d("INFO", "onConnectionFailed: falha");
     }
 
     //-----------------------------------------------move camera
     private void moveCamera(LatLng latLng, float zoom) {
-        Log.d(TAG, "moveCamera: moving the camera to : lat: " + latLng.latitude + ", lng: " + latLng.longitude);
+        Log.d("INFO", "moveCamera: moving the camera to : lat: " + latLng.latitude + ", lng: " + latLng.longitude);
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom));
 
         //txtSearch.clearFocus();
@@ -123,7 +127,7 @@ public class MapsFragment extends SupportMapFragment implements OnMapReadyCallba
 
     //----------------------------------------------localização geografica
     public void geoLocate() {
-        Log.d(TAG, "geoLocate: geoLocating");
+        Log.d("INFO", "geoLocate: geoLocating");
         String searchString = txtSearch.getText().toString();
 
         Geocoder geocoder = new Geocoder(this.getContext());
@@ -132,7 +136,7 @@ public class MapsFragment extends SupportMapFragment implements OnMapReadyCallba
         try {
             list = geocoder.getFromLocationName(searchString, 1);
         } catch (IOException e) {
-            Log.e(TAG, "IOException: " + e.getMessage());
+            Log.e("INFO", "IOException: " + e.getMessage());
         }
 
         if(list.size() > 0) {
@@ -155,12 +159,12 @@ public class MapsFragment extends SupportMapFragment implements OnMapReadyCallba
                         @Override
                         public void onComplete(@NonNull Task task) {
                             if (task.isSuccessful()) {
-                                Log.d(TAG, "onComplete: found location");
+                                Log.d("INFO", "onComplete: found location");
                                 Location currentLocation = (Location) task.getResult();
                                 if(currentLocation != null) // se não estiver procurando ainda
                                     moveCamera(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()), DEFAULT_ZOOM);
                             } else {
-                                Log.d(TAG, "onComplete: found not location");
+                                Log.d("INFO", "onComplete: found not location");
                             }
                         }
                     });
@@ -171,7 +175,7 @@ public class MapsFragment extends SupportMapFragment implements OnMapReadyCallba
 
 
         } catch(SecurityException e) {
-            Log.e(TAG, "getDeviceLocation: Exception: " + e.getMessage());
+            Log.e("INFO", "getDeviceLocation: Exception: " + e.getMessage());
         }
     }
 

@@ -31,6 +31,18 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".LoginActivity"
+            android:theme="@style/AppTheme.DialogTheme"
+            android:noHistory="true"/>
+
+        <activity android:name=".CadastroActivity"
+            android:theme="@style/AppTheme.DialogTheme"
+            android:noHistory="true"/>
+
+        <activity android:name=".OcorrenciaActivity"
+            android:theme="@style/AppTheme.DialogTheme"
+            android:noHistory="true"/>
+
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").

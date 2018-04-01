@@ -13,7 +13,7 @@ public class Usuario {
     private char genero;
     private Date data_nasc;
 
-
+    public Usuario(){}
     public Usuario(int id, String email, char genero, Date data_nasc) {
         this.id = id;
         this.email = email;

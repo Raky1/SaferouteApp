@@ -1,6 +1,7 @@
 package me.saferoute.saferouteapp;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -8,6 +9,7 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.view.menu.MenuView;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -31,7 +33,7 @@ import me.saferoute.saferouteapp.Model.Usuario;
 import me.saferoute.saferouteapp.Tools.Validacao;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, NavigationView.OnCreateContextMenuListener {
 
     //Login persist
     private Usuario user = null;
@@ -39,25 +41,14 @@ public class MainActivity extends AppCompatActivity
     private MapsFragment mapsFragment;
     private FragmentManager fragmentManager;
 
-    //scroll and mapbtn
+    //scroll e mapbtn
+    private MenuItem navLogar;
     private LinearLayout linearLayout;
-    private ImageView btnBicicleta, btnCartao, btnCel, btnDocumento, btnMochila, btnMoney, btnPc, btnPlus;
     private ImageView btnGps;
     private AutoCompleteTextView txtSearch;
 
     //Dialogs
-    private AlertDialog dialogLogin, dialogOcorrencia, dialogDicas, dialogPrivacidade, dialogSobre;
-
-    //login screen
-    private EditText txtEmail_login,txtSenha_login;
-    private Button btnLogar_login;
-
-    //ocorrencia Screen
-    private DatePicker datePicker;
-    private TimePicker timePicker;
-    private Spinner spinnerTipo, spinnerBoletim, spinnerAgrecao;
-    private EditText txtPertences_Ocor, txtComplemento_Ocor;
-    private Button btnRegistrar_Ocor;
+    private AlertDialog dialogDicas, dialogPrivacidade, dialogSobre;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,24 +67,30 @@ public class MainActivity extends AppCompatActivity
 
         //Botões filtro
         linearLayout = (LinearLayout) findViewById(R.id.linearLayoutScrollFiltro);
-        btnBicicleta = (ImageView) findViewById(R.id.btnBicicleta);
-        btnCartao = (ImageView) findViewById(R.id.btnCartao);
-        btnCel = (ImageView) findViewById(R.id.btnCel);
-        btnDocumento = (ImageView) findViewById(R.id.btnDocumento);
-        btnMochila = (ImageView) findViewById(R.id.btnMochila);
-        btnMoney = (ImageView) findViewById(R.id.btnMoney);
-        btnPc = (ImageView) findViewById(R.id.btnPc);
-        btnPlus = (ImageView) findViewById(R.id.btnPlus);
-
-        this.configButton(btnBicicleta, btnCartao, btnCel,btnDocumento, btnMochila, btnMoney, btnPc, btnPlus);
+        this.configButton();
 
         init();
+    }
+
+    //configura os botões
+    private void configButton() {
+        for(int i = 0; i < linearLayout.getChildCount(); i++)
+            linearLayout.getChildAt(i).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    for(int i = 0; i < linearLayout.getChildCount(); i++)
+                        linearLayout.getChildAt(i).setBackgroundColor(Color.TRANSPARENT);
+
+                    view.setBackgroundColor(Color.rgb(100,100,100));
+                }
+            });
     }
 
     private void init() {
         //Barra lateral de navegação...
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        navLogar = (MenuItem)navigationView.getMenu().findItem(R.id.nav_logar);
 
         //set fragment Map
         mapsFragment = new MapsFragment();
@@ -110,71 +107,8 @@ public class MainActivity extends AppCompatActivity
         //Configura Dialogs
         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
 
-        //config Login screen
-        View view = getLayoutInflater().inflate(R.layout.dialog_login, null);
-        builder.setView(view);
-        dialogLogin = builder.create();
-
-        //tela login
-        txtEmail_login = (EditText) view.findViewById(R.id.txtEmail);
-        txtSenha_login = (EditText) view.findViewById(R.id.txtSenha);
-        btnLogar_login = (Button) view.findViewById(R.id.btnLogar);
-
-        btnLogar_login.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(Validacao.CheckEmail(txtEmail_login.getText().toString())) {
-                    if (Validacao.CheckSenha(txtSenha_login.getText().toString())) {
-
-                        dialogLogin.dismiss();
-                    } else {
-                        txtSenha_login.requestFocus();
-                    }
-                } else {
-                    txtEmail_login.requestFocus();
-                }
-            }
-        });
-
-        //-----Ocorrencia Dialog
-        view = getLayoutInflater().inflate(R.layout.dialog_ocorrencia, null);
-        builder.setView(view);
-        dialogOcorrencia = builder.create();
-
-        datePicker = (DatePicker) view.findViewById(R.id.datePicker);
-        timePicker = (TimePicker) view.findViewById(R.id.timePicker);
-        spinnerTipo = (Spinner) view.findViewById(R.id.spinnerTipo);
-        spinnerBoletim = (Spinner) view.findViewById(R.id.spinnerBoletim);
-        spinnerAgrecao = (Spinner) view.findViewById(R.id.spinnerAgrecao);
-        txtPertences_Ocor = (EditText) view.findViewById(R.id.txtPertences);
-        txtComplemento_Ocor = (EditText) view.findViewById(R.id.txtComplemento);
-        btnRegistrar_Ocor = (Button) view.findViewById(R.id.btnRegistrar);
-
-        Calendar c = Calendar.getInstance();
-        c.setTime(new Date());
-        c.add(Calendar.YEAR, -1);
-        datePicker.setMinDate(c.getTime().getTime());
-
-        ArrayAdapter<CharSequence> adapterTipo = ArrayAdapter.createFromResource(this,
-                R.array.ocorrencia_tipos, android.R.layout.simple_spinner_item);
-        adapterTipo.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerTipo.setAdapter(adapterTipo);
-
-        ArrayAdapter<CharSequence> adapterYN = ArrayAdapter.createFromResource(this,
-                R.array.ocorrencia_yes_no, android.R.layout.simple_spinner_item);
-        adapterYN.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerBoletim.setAdapter(adapterYN);
-        spinnerAgrecao.setAdapter(adapterYN);
-
-        btnRegistrar_Ocor.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dialogOcorrencia.dismiss();
-            }
-        });
-
         //dialog Dicas de seguraça
-        view = getLayoutInflater().inflate(R.layout.dialog_dicas, null);
+        View view = getLayoutInflater().inflate(R.layout.dialog_dicas, null);
         builder.setView(view);
         dialogDicas = builder.create();
 
@@ -203,17 +137,27 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    //@SuppressWarnings("StatementWithEmptyBody") // não sei pra que esta aqui...
+    //@SuppressWarnings("StatementWithEmptyBody") //acho desnecessário
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
         if(id == R.id.nav_logar) {
-            dialogLogin.show();
+            if(item.getTitle().toString() == getResources().getString(R.string.nav_logar))
+                startActivityForResult(new Intent(MainActivity.this, LoginActivity.class), 901);
+            else {
+                user = null;
+                item.setTitle(getResources().getString(R.string.nav_logar));
+            }
 
         } else if (id == R.id.nav_fui_roubado) {
-            dialogOcorrencia.show();
+            if(user != null) {
+                Intent intent = new Intent(MainActivity.this, OcorrenciaActivity.class);
+                intent.putExtra("id", user.getId());
+                startActivity(intent);
+            } else
+                startActivityForResult(new Intent(MainActivity.this, LoginActivity.class), 901);
 
         } else if (id == R.id.nav_dicas) {
             dialogDicas.show();
@@ -233,18 +177,17 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-    //configura os botões
-    private void configButton(ImageView ...btns) {
-        for (ImageView btn : btns){
-            btn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    for(int i = 0; i < linearLayout.getChildCount(); i++)
-                        linearLayout.getChildAt(i).setBackgroundColor(Color.TRANSPARENT);
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        //super.onActivityResult(requestCode, resultCode, data);
 
-                    view.setBackgroundColor(Color.rgb(100,100,100));
-                }
-            });
+        //Login ok
+        if (requestCode == 901 && resultCode == RESULT_OK) {
+            user = new Usuario();
+            user.setId(data.getIntExtra("id", 0));
+            user.setEmail(data.getStringExtra("email"));
+            user.setSenha(data.getStringExtra("senha"));
+            navLogar.setTitle(getResources().getString(R.string.nav_logado));
         }
 
     }

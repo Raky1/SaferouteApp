@@ -1,5 +1,8 @@
 package me.saferoute.saferouteapp.Tools;
 
+import android.content.Context;
+import android.widget.Toast;
+
 public class Validacao {
 
     public static boolean CheckEmail(String email) {
