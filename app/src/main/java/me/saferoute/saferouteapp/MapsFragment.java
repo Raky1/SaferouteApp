@@ -125,6 +125,10 @@ public class MapsFragment extends SupportMapFragment implements OnMapReadyCallba
             MainActivity activity = (MainActivity) getActivity();
             activity.showROcorrencia(latLng.latitude, latLng.longitude);
             setMode(0);
+        } else if (mode==2) {
+            MainActivity activity = (MainActivity) getActivity();
+            activity.showEditOcorrencia(latLng.latitude, latLng.longitude);
+            setMode(0);
         }
     }
 

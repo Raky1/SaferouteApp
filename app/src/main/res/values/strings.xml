@@ -58,6 +58,7 @@
         <item>Não</item>
     </string-array>
     <string name="ocorrencia_registrar">Registrar</string>
+    <string name="ocorrencia_atualizar">Atualizar</string>
 
     <!-- Ocorrencia Lista Dialog -->
     <string name="ocorrencia_editar">Editar</string>

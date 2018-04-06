@@ -1,5 +1,6 @@
 package me.saferoute.saferouteapp.Model;
 
+import java.io.Serializable;
 import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -9,7 +10,7 @@ import java.util.Date;
  * Created by Rafael on 17/03/2018.
  */
 
-public class Ocorrencia {
+public class Ocorrencia implements Serializable{
 
     private int id;
     private double latitude, longitude;
@@ -32,8 +33,8 @@ public class Ocorrencia {
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
 
-    public double getLatitudo() { return latitude; }
-    public void setLatitudo(double latitude) { this.latitude = latitude; }
+    public double getLatitude() { return latitude; }
+    public void setLatitude(double latitude) { this.latitude = latitude; }
 
     public double getLongitude() { return longitude; }
     public void setLongitude(double longitude) { this.longitude = longitude; }

@@ -15,6 +15,7 @@ import android.widget.Toast;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -78,12 +79,10 @@ public class ListaActivity extends Activity implements AsyncResponse {
             @Override
             public void onClick(View view) {
                 if(selectedItem != null) {
-                    //requestData = new RequestData();
-                    //requestData.delegate = asyncResponse;
-                    //String parametro = "action=update&id="+selectedItem.getId();
-                    //comando = 1;
-                    //requestData.execute(URL_OCORRENCIA, parametro);
 
+                    getIntent().putExtra("ocorrencia", (Serializable) selectedItem);
+                    setResult(RESULT_OK, getIntent());
+                    finish();
 
                     btnEditar.setEnabled(false);
                     btnExcluir.setEnabled(false);
@@ -138,7 +137,7 @@ public class ListaActivity extends Activity implements AsyncResponse {
                         Ocorrencia ocor = new Ocorrencia();
 
                         ocor.setId(jsonOcor.getInt("id"));
-                        ocor.setLatitudo(jsonOcor.getDouble("latitude"));
+                        ocor.setLatitude(jsonOcor.getDouble("latitude"));
                         ocor.setLongitude(jsonOcor.getDouble("longitude"));
                         ocor.setTipo(jsonOcor.getString("tipo"));
 
@@ -151,8 +150,11 @@ public class ListaActivity extends Activity implements AsyncResponse {
                         ocor.setHora(hora);
 
                         ocor.setPertences(jsonOcor.getString("pertences"));
-                        ocor.setBoletim((jsonOcor.getString("boletim")=="1"? true : false));
-                        ocor.setAgrecao((jsonOcor.getString("agrecao")=="1"? true : false));
+                        ocor.setBoletim((jsonOcor.getString("boletim").toString().equals("1")? true : false));
+                        ocor.setAgrecao((jsonOcor.getString("agrecao").toString().equals("1")? true : false));
+                        Log.d("INFO", "Boletim: "+(ocor.isBoletim()?"s":"n") +
+                                "Agreção: "+(ocor.isAgrecao()?"s":"n"));
+
                         ocor.setComplemento(jsonOcor.getString("complemento"));
 
                         ocorrencias.add(ocor);

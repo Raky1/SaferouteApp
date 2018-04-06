@@ -26,9 +26,11 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TimePicker;
 
+import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
 
+import me.saferoute.saferouteapp.Model.Ocorrencia;
 import me.saferoute.saferouteapp.Model.Usuario;
 import me.saferoute.saferouteapp.Tools.Validacao;
 
@@ -37,6 +39,7 @@ public class MainActivity extends AppCompatActivity
 
     //Login persist
     private Usuario user = null;
+    private Ocorrencia ocor4Edit = null;
 
     private MapsFragment mapsFragment;
     private FragmentManager fragmentManager;
@@ -165,7 +168,7 @@ public class MainActivity extends AppCompatActivity
             if(user != null) {
                 Intent intent = new Intent(MainActivity.this, ListaActivity.class);
                 intent.putExtra("id", user.getId());
-                startActivity(intent);
+                startActivityForResult(intent, 902);
             } else
                 startActivityForResult(new Intent(MainActivity.this, LoginActivity.class), 901);
 
@@ -192,12 +195,26 @@ public class MainActivity extends AppCompatActivity
         drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
 
         Intent intent = new Intent(MainActivity.this, OcorrenciaActivity.class);
+        intent.putExtra("mode", 0);
         intent.putExtra("id", user.getId());
         intent.putExtra("latitude", latitude);
         intent.putExtra("longitude", longitude);
         startActivity(intent);
     }
 
+    public void showEditOcorrencia(double latitude, double longitude) {
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+
+        ocor4Edit.setLatitude(latitude);
+        ocor4Edit.setLongitude(longitude);
+
+        Intent intent = new Intent(MainActivity.this, OcorrenciaActivity.class);
+        intent.putExtra("mode", 1);
+        intent.putExtra("id", user.getId());
+        intent.putExtra("ocorrencia", ocor4Edit);
+        startActivity(intent);
+    }
 
 
     @Override
@@ -211,6 +228,16 @@ public class MainActivity extends AppCompatActivity
             user.setEmail(data.getStringExtra("email"));
             user.setSenha(data.getStringExtra("senha"));
             navLogar.setTitle(getResources().getString(R.string.nav_logado));
+        }
+
+        //Edit Ocorrencia
+        if (requestCode == 902 && resultCode == RESULT_OK) {
+            ocor4Edit = (Ocorrencia) data.getSerializableExtra("ocorrencia");
+
+            DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+            drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+
+            mapsFragment.setMode(2);
         }
 
     }
