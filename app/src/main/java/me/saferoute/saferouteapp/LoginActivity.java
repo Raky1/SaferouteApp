@@ -17,19 +17,21 @@ import android.widget.Toast;
 
 import me.saferoute.saferouteapp.DAO.AsyncResponse;
 import me.saferoute.saferouteapp.DAO.RequestData;
+import me.saferoute.saferouteapp.Model.Usuario;
 import me.saferoute.saferouteapp.Tools.Validacao;
 
 public class LoginActivity extends Activity implements AsyncResponse{
 
-    private static final String URL_LOGIN = "http://saferoute.me/php/Executor/ExecLogin.php";
+    private static final String URL_LOGIN = "http://saferoute.me/php/mExecutor/mExecLogin.php";
 
     private RequestData requestData;
+    private AsyncResponse asyncResponse;
 
     private TextView txtCadastro;
     private EditText txtEmail, txtSenha;
     private Button  btnLogar;
 
-    private AsyncResponse asyncResponse;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -73,15 +75,18 @@ public class LoginActivity extends Activity implements AsyncResponse{
                 txtCadastro.setTextColor(Color.RED);
                 txtCadastro.setEnabled(false);
 
-                /*if(Validacao.CheckEmail(txtEmail_login.getText().toString())) {
-                    if (Validacao.CheckSenha(txtSenha_login.getText().toString())) {
+                if(Validacao.CheckEmail(txtEmail.getText().toString())) {
+                    if (Validacao.CheckSenha(txtSenha.getText().toString())) {
                         //qualquer coisa
                     } else {
-                        txtSenha_login.requestFocus();
+
+                        Toast.makeText(view.getContext(), "Senha invalida", Toast.LENGTH_SHORT).show();
+                        txtSenha.requestFocus();
                     }
                 } else {
-                    txtEmail_login.requestFocus();
-                }*/
+                    Toast.makeText(view.getContext(), "Login invalido", Toast.LENGTH_SHORT).show();
+                    txtEmail.requestFocus();
+                }
             }
         });
 
@@ -91,7 +96,8 @@ public class LoginActivity extends Activity implements AsyncResponse{
                 btnLogar.setEnabled(false);
                 txtCadastro.setTextColor(Color.RED);
                 txtCadastro.setEnabled(false);
-                startActivity(new Intent(LoginActivity.this, CadastroActivity.class));
+
+                startActivityForResult(new Intent(LoginActivity.this, CadastroActivity.class), 901);
             }
         });
     }
@@ -136,5 +142,25 @@ public class LoginActivity extends Activity implements AsyncResponse{
     public void onBackPressed() {
         super.onBackPressed();
         setResult(RESULT_CANCELED);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        //super.onActivityResult(requestCode, resultCode, data);
+
+        //Cadastro ok
+        if (requestCode == 901 && resultCode == RESULT_OK) {
+
+            getIntent().putExtra("id", data.getIntExtra("id", 0));
+            getIntent().putExtra("email", data.getStringExtra("email"));
+            getIntent().putExtra("senha", data.getStringExtra("senha"));
+            setResult(RESULT_OK, getIntent());
+            finish();
+        } else if (requestCode == 901 && resultCode == RESULT_CANCELED) {
+            txtCadastro.setEnabled(true);
+            txtCadastro.setTextColor(getResources().getColor(R.color.link));
+            btnLogar.setEnabled(true);
+        }
+
     }
 }

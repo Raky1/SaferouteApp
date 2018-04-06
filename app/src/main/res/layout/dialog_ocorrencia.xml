@@ -61,7 +61,7 @@
             android:layout_alignParentEnd="true"
             android:layout_below="@+id/datePicker"
             android:layout_toEndOf="@+id/txtview_hora"
-            android:timePickerMode="spinner" />
+            android:timePickerMode="spinner"/>
 
         <!-- Tipo -->
         <TextView
@@ -95,8 +95,9 @@
             android:layout_width="match_parent"
             android:layout_height="80dp"
             android:gravity="top"
-            android:layout_below="@+id/spinnerTipo"
-            android:layout_toEndOf="@+id/txtview_pertences"/>
+            android:layout_marginBottom="10dp"
+            android:layout_below="@+id/txtview_pertences"
+            android:background="@drawable/border_edittext"/>
 
         <!-- boletim -->
         <TextView
@@ -140,6 +141,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/spinnerAgrecao"
+            android:layout_marginRight="3dp"
             android:text="@string/ocorrencia_complemento"
             android:textSize="@dimen/text_type_size"/>
 
@@ -148,8 +150,9 @@
             android:layout_width="match_parent"
             android:layout_height="80dp"
             android:gravity="top"
-            android:layout_below="@+id/spinnerAgrecao"
-            android:layout_toEndOf="@+id/txtview_complemento"/>
+            android:layout_marginBottom="10dp"
+            android:layout_below="@+id/txtview_complemento"
+            android:background="@drawable/border_edittext"/>
 
         <Button
             android:id="@+id/btnRegistrar"

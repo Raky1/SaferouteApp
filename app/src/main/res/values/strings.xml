@@ -12,6 +12,7 @@
     <string name="nav_logado">Encerrar Sessão</string>
 
     <string name="nav_fui_roubado">Fui Roubado</string>
+    <string name="nav_suas_ocorrencias">Suas Ocorrencias</string>
     <string name="nav_personal">Local Atual</string>
     <string name="nav_home">Marcador</string>
     <string name="nav_dicas">Dicas de Segurança</string>
@@ -21,10 +22,15 @@
     <!-- Cadastro Dialog -->
     <string name="cadastro_titulo">Cadastro</string>
     <string name="cadastro_email">Email</string>
-    <string name="cadastro_senha">Senha</string>
+    <string name="cadastro_senha">Senha de 6 ou mais caracteres</string>
+    <string name="cadastro_senhaR">Senha novamente</string>
     <string name="cadastro_genero">Genero:</string>
     <string name="cadastro_data_nasc">Data de Nascimento: </string>
     <string name="cadastro_cadastrar">Cadastrar</string>
+    <string-array name="cadastro_M_F">
+        <item>M</item>
+        <item>F</item>
+    </string-array>
 
     <!-- Login Dialog -->
     <string name="login_login">Login</string>
@@ -44,13 +50,17 @@
         <item>Furto</item>
     </string-array>
     <string name="ocorrencia_pertences">Pretences: </string>
-    <string name="ocorrencia_boletim">Boletim: </string>
-    <string name="ocorrencia_agrecao">Agreção: </string>
+    <string name="ocorrencia_boletim">Fez Boletim? </string>
+    <string name="ocorrencia_agrecao">Teve Agreção? </string>
     <string name="ocorrencia_complemento">Complemento: </string>
     <string-array name="ocorrencia_yes_no">
         <item>Sim</item>
         <item>Não</item>
     </string-array>
     <string name="ocorrencia_registrar">Registrar</string>
+
+    <!-- Ocorrencia Lista Dialog -->
+    <string name="ocorrencia_editar">Editar</string>
+    <string name="ocorrencia_excluir">Excluir</string>
 
 </resources>

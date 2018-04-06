@@ -25,7 +25,6 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.location.places.GeoDataApi;
 import com.google.android.gms.location.places.GeoDataClient;
 import com.google.android.gms.location.places.Places;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -41,10 +40,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static android.content.ContentValues.TAG;
-
 public class MapsFragment extends SupportMapFragment implements OnMapReadyCallback,
-    GoogleApiClient.OnConnectionFailedListener {
+    GoogleApiClient.OnConnectionFailedListener, GoogleMap.OnMapClickListener {
 
     private static final String FINE_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION;
     private static final String COARSE_LOCATION = Manifest.permission.ACCESS_COARSE_LOCATION;
@@ -62,6 +59,8 @@ public class MapsFragment extends SupportMapFragment implements OnMapReadyCallba
     private PlaceAutoCompleteAdapter mPlaceAutoCompleteAdapter;
     private GeoDataClient mGeoDataClient;
 
+    private int mode = 0;
+
 
     private AutoCompleteTextView txtSearch;
     private ImageView btnGps;
@@ -78,6 +77,7 @@ public class MapsFragment extends SupportMapFragment implements OnMapReadyCallba
         Log.d("INFO", "onMapReady: OK");
 
         mMap = googleMap;
+        mMap.setOnMapClickListener(this);
 
         //permissão
         getLocationPermission();
@@ -107,12 +107,25 @@ public class MapsFragment extends SupportMapFragment implements OnMapReadyCallba
             mMap.setMyLocationEnabled(true);
             mMap.getUiSettings().setMyLocationButtonEnabled(false);
         }
+
+
     }
 
     //verifica se google api falha
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
         Log.d("INFO", "onConnectionFailed: falha");
+    }
+
+    //------click map
+    @Override
+    public void onMapClick(LatLng latLng) {
+        Log.d("INFO", "click on map");
+        if(mode==1) {
+            MainActivity activity = (MainActivity) getActivity();
+            activity.showROcorrencia(latLng.latitude, latLng.longitude);
+            setMode(0);
+        }
     }
 
     //-----------------------------------------------move camera
@@ -179,6 +192,18 @@ public class MapsFragment extends SupportMapFragment implements OnMapReadyCallba
         }
     }
 
+    //-------------------------------0=show Ocorrencia / 1=get Coordenadas--------
+    private void changeMode() {
+        if(mode == 0) {
+
+        } else if(mode == 1) {
+            //limpa marcadores no mapa
+            //esconde scroll
+
+        }
+    }
+
+
     //----------------------------------------------gerenciamento de permissao de localização
     private void getLocationPermission() {
         String[] permissions = {Manifest.permission.ACCESS_FINE_LOCATION,
@@ -192,7 +217,6 @@ public class MapsFragment extends SupportMapFragment implements OnMapReadyCallba
 
         } else
             ActivityCompat.requestPermissions(this.getActivity(), permissions, LOCATION_PERMISSION_REQUEST_CODE);
-
     }
 
     //----------------------------------------------get requests permissions
@@ -212,13 +236,19 @@ public class MapsFragment extends SupportMapFragment implements OnMapReadyCallba
         }
     }
 
-    //esconde teclado... era pelo menos...
+    //-----------------------------esconde teclado... era pelo menos...
     private void hideSoftKeyboard() {
         InputMethodManager imm = (InputMethodManager)this.getContext().getSystemService(this.getContext().INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(txtSearch.getWindowToken(), 0);
     }
 
     //-------------------------------------------propriedades
+    public void setMode(int mode) {
+        this.mode = mode;
+        changeMode();
+    }
+
+
     public void setTxtSearch(final AutoCompleteTextView txtSearch) {
         this.txtSearch = txtSearch;
         txtSearch.setOnEditorActionListener(new TextView.OnEditorActionListener() {

@@ -32,14 +32,17 @@
         </activity>
 
         <activity android:name=".LoginActivity"
-            android:theme="@style/AppTheme.DialogTheme"
-            android:noHistory="true"/>
+            android:theme="@style/AppTheme.DialogTheme"/>
 
         <activity android:name=".CadastroActivity"
             android:theme="@style/AppTheme.DialogTheme"
             android:noHistory="true"/>
 
         <activity android:name=".OcorrenciaActivity"
+            android:theme="@style/AppTheme.DialogTheme"
+            android:noHistory="true"/>
+
+        <activity android:name=".ListaActivity"
             android:theme="@style/AppTheme.DialogTheme"
             android:noHistory="true"/>
 

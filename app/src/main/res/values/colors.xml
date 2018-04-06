@@ -7,4 +7,5 @@
     <color name="backgroundtransparentscroll" >#DD000000</color>
     <color name="backgroundtransparents" >#00000000</color>
     <color name="link">#5b9fff</color>
+    <color name="edittext_border">#AAA</color>
 </resources>

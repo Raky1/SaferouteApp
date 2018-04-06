@@ -12,6 +12,10 @@
             android:id="@+id/nav_fui_roubado"
             android:icon="@drawable/ic_menu_send"
             android:title="@string/nav_fui_roubado" />
+        <item
+            android:id="@+id/nav_suas_ocorrencias"
+            android:icon="@drawable/ic_menu_send"
+            android:title="@string/nav_suas_ocorrencias" />
     </group>
 
     <!-- localizaçãoes -->

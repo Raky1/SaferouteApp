@@ -124,8 +124,8 @@ public class MainActivity extends AppCompatActivity
 
         //****************************************************************************************************************************
 
-    }
 
+    }
 
     @Override
     public void onBackPressed() {
@@ -140,6 +140,9 @@ public class MainActivity extends AppCompatActivity
     //@SuppressWarnings("StatementWithEmptyBody") //acho desnecessário
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
@@ -153,7 +156,14 @@ public class MainActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_fui_roubado) {
             if(user != null) {
-                Intent intent = new Intent(MainActivity.this, OcorrenciaActivity.class);
+                drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+                mapsFragment.setMode(1);//mode de captura de coordenadas
+            } else
+                startActivityForResult(new Intent(MainActivity.this, LoginActivity.class), 901);
+
+        } else if (id == R.id.nav_suas_ocorrencias) {
+            if(user != null) {
+                Intent intent = new Intent(MainActivity.this, ListaActivity.class);
                 intent.putExtra("id", user.getId());
                 startActivity(intent);
             } else
@@ -172,10 +182,23 @@ public class MainActivity extends AppCompatActivity
             mapsFragment.getDeviceLocation();
         }
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
+
         return true;
     }
+
+    public void showROcorrencia(double latitude, double longitude) {
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+
+        Intent intent = new Intent(MainActivity.this, OcorrenciaActivity.class);
+        intent.putExtra("id", user.getId());
+        intent.putExtra("latitude", latitude);
+        intent.putExtra("longitude", longitude);
+        startActivity(intent);
+    }
+
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
