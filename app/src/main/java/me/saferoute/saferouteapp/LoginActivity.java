@@ -18,6 +18,7 @@ import android.widget.Toast;
 import me.saferoute.saferouteapp.DAO.AsyncResponse;
 import me.saferoute.saferouteapp.DAO.RequestData;
 import me.saferoute.saferouteapp.Model.Usuario;
+import me.saferoute.saferouteapp.Tools.CacheData;
 import me.saferoute.saferouteapp.Tools.Validacao;
 
 public class LoginActivity extends Activity implements AsyncResponse{
@@ -100,6 +101,8 @@ public class LoginActivity extends Activity implements AsyncResponse{
                 startActivityForResult(new Intent(LoginActivity.this, CadastroActivity.class), 901);
             }
         });
+
+        txtEmail.setText(CacheData.GetEmail(this));
     }
 
     private String getParametros() {
@@ -121,6 +124,9 @@ public class LoginActivity extends Activity implements AsyncResponse{
             getIntent().putExtra("email", txtEmail.getText().toString());
             getIntent().putExtra("senha", txtSenha.getText().toString());
             setResult(RESULT_OK, getIntent());
+
+            CacheData.SaveEmail(txtEmail.getText().toString(), this);
+
             finish();
         }
     }

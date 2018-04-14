@@ -19,6 +19,10 @@
     <string name="nav_privacidade">Politicas de Privacidade</string>
     <string name="nav_sobre">Sobre</string>
 
+    <!-- Mapa -->
+
+    <string name="btn_mapa_confirma_posição">Confirmar Posição</string>
+
     <!-- Cadastro Dialog -->
     <string name="cadastro_titulo">Cadastro</string>
     <string name="cadastro_email">Email</string>

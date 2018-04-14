@@ -14,7 +14,7 @@
  *  limitations under the License.
  */
 
-package me.saferoute.saferouteapp;
+package me.saferoute.saferouteapp.Tools;
 
 import android.content.Context;
 import android.graphics.Typeface;

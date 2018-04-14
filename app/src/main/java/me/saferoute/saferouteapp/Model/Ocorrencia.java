@@ -1,5 +1,8 @@
 package me.saferoute.saferouteapp.Model;
 
+import com.google.android.gms.maps.model.LatLng;
+import com.google.maps.android.clustering.ClusterItem;
+
 import java.io.Serializable;
 import java.sql.Time;
 import java.text.SimpleDateFormat;
@@ -10,7 +13,7 @@ import java.util.Date;
  * Created by Rafael on 17/03/2018.
  */
 
-public class Ocorrencia implements Serializable{
+public class Ocorrencia implements Serializable, ClusterItem {
 
     private int id;
     private double latitude, longitude;
@@ -18,6 +21,11 @@ public class Ocorrencia implements Serializable{
     private Date data;
     private Time hora;
     private boolean boletim, agrecao;
+
+    @Override
+    public LatLng getPosition() {
+        return new LatLng(latitude, longitude);
+    }
 
     @Override
     public String toString() {
@@ -59,4 +67,5 @@ public class Ocorrencia implements Serializable{
 
     public String getPertences() { return pertences; }
     public void setPertences(String pertences) { this.pertences = pertences; }
+
 }

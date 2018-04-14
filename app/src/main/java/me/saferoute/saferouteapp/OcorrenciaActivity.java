@@ -1,6 +1,7 @@
 package me.saferoute.saferouteapp;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -36,6 +37,8 @@ public class OcorrenciaActivity extends Activity implements AsyncResponse{
     private Spinner spinnerTipo, spinnerBoletim, spinnerAgrecao;
     private EditText txtPertences_Ocor, txtComplemento_Ocor;
     private Button btnRegistrar_Ocor;
+
+    private Ocorrencia ocorrencia;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -156,13 +159,18 @@ public class OcorrenciaActivity extends Activity implements AsyncResponse{
     }
 
     private String getParametros() {
+        ocorrencia = new Ocorrencia();
+        //ocorrencia.setId();
+        ocorrencia.setLatitude(getIntent().getDoubleExtra("latitude", 0));
+        ocorrencia.setLongitude(getIntent().getDoubleExtra("longitude", 0));
+        ocorrencia.setTipo(spinnerTipo.getSelectedItem().toString());
 
         String parametro = "";
 
         if(mode==0) {
             parametro = "usuario=" + getIntent().getIntExtra("id", 0) +
-                    "&latitude=" + getIntent().getDoubleExtra("latitude", 0) +
-                    "&longitude=" + getIntent().getDoubleExtra("longitude", 0);
+                    "&latitude=" + ocorrencia.getLatitude() +
+                    "&longitude=" + ocorrencia.getLongitude();
 
             parametro += "&dia=" + datePicker.getYear() + "-" +
                     (datePicker.getMonth() < 9 ? "0" : "") + (datePicker.getMonth() + 1) + "-" +
@@ -220,8 +228,15 @@ public class OcorrenciaActivity extends Activity implements AsyncResponse{
     public void processFinish(String result) {
         Log.d("INFO", result);
         if(mode == 0)
-            if(result.contains("Registro_Ok")) {
+            if(result.contains("Registro_OK")) {
                 Toast.makeText(this, "Ocorrencia Registrada", Toast.LENGTH_SHORT).show();
+
+                ocorrencia.setId(Integer.parseInt(result.split("\\*")[1]));
+
+                Intent intent = new Intent();
+                intent.putExtra("ocorrencia", ocorrencia);
+                setResult(RESULT_OK, intent);
+
                 finish();
             } else {
                 Toast.makeText(this, "Erro ao registrar a ocorrencia", Toast.LENGTH_SHORT).show();

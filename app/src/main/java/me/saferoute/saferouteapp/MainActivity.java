@@ -10,6 +10,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.view.menu.MenuView;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -73,6 +74,8 @@ public class MainActivity extends AppCompatActivity
         this.configButton();
 
         init();
+
+        Log.d("Diretório", getCacheDir().getAbsolutePath());
     }
 
     //configura os botões
@@ -127,7 +130,18 @@ public class MainActivity extends AppCompatActivity
 
         //****************************************************************************************************************************
 
+    }
 
+    @Override
+    protected void onDestroy() {
+        mapsFragment.saveLastLocation();
+        super.onDestroy();
+    }
+
+    @Override
+    protected void onStop() {
+        mapsFragment.saveLastLocation();
+        super.onStop();
     }
 
     @Override
@@ -160,7 +174,7 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_fui_roubado) {
             if(user != null) {
                 drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-                mapsFragment.setMode(1);//mode de captura de coordenadas
+                mapsFragment.setMode(MapsFragment.MODE_CLICK_VIEW);//mode de captura de coordenadas
             } else
                 startActivityForResult(new Intent(MainActivity.this, LoginActivity.class), 901);
 
@@ -190,6 +204,7 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
+    //***************chamado quando cadastrar  nova ocorrencia
     public void showROcorrencia(double latitude, double longitude) {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
@@ -199,9 +214,10 @@ public class MainActivity extends AppCompatActivity
         intent.putExtra("id", user.getId());
         intent.putExtra("latitude", latitude);
         intent.putExtra("longitude", longitude);
-        startActivity(intent);
+        startActivityForResult(intent,903);
     }
 
+    //***************chamado quando se coleta a posição no mode de click do fragment map
     public void showEditOcorrencia(double latitude, double longitude) {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
@@ -213,10 +229,11 @@ public class MainActivity extends AppCompatActivity
         intent.putExtra("mode", 1);
         intent.putExtra("id", user.getId());
         intent.putExtra("ocorrencia", ocor4Edit);
-        startActivity(intent);
+        startActivityForResult(intent, 903);
     }
 
 
+    //****************resposta das activits
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         //super.onActivityResult(requestCode, resultCode, data);
@@ -238,6 +255,11 @@ public class MainActivity extends AppCompatActivity
             drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
 
             mapsFragment.setMode(2);
+        }
+
+        //Add Ocorrencia
+        if (requestCode == 903 && resultCode == RESULT_OK) {
+            mapsFragment.addMarker((Ocorrencia) data.getSerializableExtra("ocorrencia"));
         }
 
     }

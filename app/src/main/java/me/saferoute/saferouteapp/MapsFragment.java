@@ -13,7 +13,6 @@ import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AutoCompleteTextView;
@@ -35,14 +34,31 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.maps.android.clustering.ClusterManager;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MapsFragment extends SupportMapFragment implements OnMapReadyCallback,
-    GoogleApiClient.OnConnectionFailedListener, GoogleMap.OnMapClickListener {
+import me.saferoute.saferouteapp.DAO.AsyncResponse;
+import me.saferoute.saferouteapp.DAO.RequestData;
+import me.saferoute.saferouteapp.Model.Ocorrencia;
+import me.saferoute.saferouteapp.Tools.CacheData;
+import me.saferoute.saferouteapp.Tools.PlaceAutoCompleteAdapter;
 
+public class MapsFragment extends SupportMapFragment implements OnMapReadyCallback,
+    GoogleApiClient.OnConnectionFailedListener, GoogleMap.OnMapClickListener, AsyncResponse {
+
+    //modos
+    public static final int MODE_NORMAL_VIEW = 0;
+    public static final int MODE_CLICK_VIEW = 1;
+    public static final int MODE_THERMAL_VIEW = 2;
+    private int mode = 0;
+
+    private static final String URL_OCORRENCIAS = "http://saferoute.me/php/mExecutor/mExecOcorrencia.php";
     private static final String FINE_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION;
     private static final String COARSE_LOCATION = Manifest.permission.ACCESS_COARSE_LOCATION;
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1234;
@@ -59,11 +75,13 @@ public class MapsFragment extends SupportMapFragment implements OnMapReadyCallba
     private PlaceAutoCompleteAdapter mPlaceAutoCompleteAdapter;
     private GeoDataClient mGeoDataClient;
 
-    private int mode = 0;
-
+    private RequestData requestData;
+    private ClusterManager<Ocorrencia> mClusterManager;
 
     private AutoCompleteTextView txtSearch;
     private ImageView btnGps;
+
+    //private List<Ocorrencia> ocorrencias;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -108,16 +126,19 @@ public class MapsFragment extends SupportMapFragment implements OnMapReadyCallba
             mMap.getUiSettings().setMyLocationButtonEnabled(false);
         }
 
+        //Cluster manager
+        mClusterManager = new ClusterManager<Ocorrencia>(getContext(), mMap);
+        mMap.setOnCameraIdleListener(mClusterManager);
+        mMap.setOnMarkerClickListener(mClusterManager);
 
+        updateMarkers();
+
+        loadtLastLocation();
     }
 
-    //verifica se google api falha
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        Log.d("INFO", "onConnectionFailed: falha");
-    }
-
-    //------click map
+    /**
+     * Eventos do mapa... click, movimento ativo da camera, geo localização do editText
+     */
     @Override
     public void onMapClick(LatLng latLng) {
         Log.d("INFO", "click on map");
@@ -132,12 +153,11 @@ public class MapsFragment extends SupportMapFragment implements OnMapReadyCallba
         }
     }
 
+
     //-----------------------------------------------move camera
     private void moveCamera(LatLng latLng, float zoom) {
         Log.d("INFO", "moveCamera: moving the camera to : lat: " + latLng.latitude + ", lng: " + latLng.longitude);
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom));
-
-        //txtSearch.clearFocus();
 
         hideSoftKeyboard();
     }
@@ -162,7 +182,9 @@ public class MapsFragment extends SupportMapFragment implements OnMapReadyCallba
         }
     }
 
-    //-----------------------------------------------get device location
+    /**
+     * Localização do dispositivo.... coleta e requisição de permissão
+     */
     public void getDeviceLocation() {
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this.getContext());
 
@@ -186,24 +208,13 @@ public class MapsFragment extends SupportMapFragment implements OnMapReadyCallba
                         }
                     });
                 } else
-                    Toast.makeText(this.getContext(),"Ative o GPS", Toast.LENGTH_SHORT);
+                    Toast.makeText(this.getContext(),"Ative o GPS para melhor experiencia", Toast.LENGTH_LONG).show();
             } else
                 getLocationPermission();
 
 
         } catch(SecurityException e) {
             Log.e("INFO", "getDeviceLocation: Exception: " + e.getMessage());
-        }
-    }
-
-    //-------------------------------0=show Ocorrencia / 1=get Coordenadas--------
-    private void changeMode() {
-        if(mode == 0) {
-
-        } else if(mode == 1) {
-            //limpa marcadores no mapa
-            //esconde scroll
-
         }
     }
 
@@ -223,7 +234,86 @@ public class MapsFragment extends SupportMapFragment implements OnMapReadyCallba
             ActivityCompat.requestPermissions(this.getActivity(), permissions, LOCATION_PERMISSION_REQUEST_CODE);
     }
 
-    //----------------------------------------------get requests permissions
+    /**
+     * adiciona e atualiza markadores
+     */
+    public void addMarker(Ocorrencia ocorrencia) {
+        mClusterManager.addItem(ocorrencia);
+        mClusterManager.cluster();
+    }
+
+    public void addMarkers(List<Ocorrencia> ocorrencias) {
+        mClusterManager.clearItems();
+        mClusterManager.addItems(ocorrencias);
+        mClusterManager.cluster();
+    }
+
+    private void updateMarkers() {
+        requestData = new RequestData();
+        requestData.delegate = this;
+
+        String parametros = "action=getAll";
+
+        requestData.execute(URL_OCORRENCIAS, parametros);
+    }
+
+    @Override
+    public void processFinish(String result) {
+        Log.d("INFO", result);
+        try {
+            JSONObject jsonObject = new JSONObject(result);
+            List<Ocorrencia> ocorrencias = new ArrayList<Ocorrencia>();
+
+            if (jsonObject.getBoolean("resultado")) {
+                JSONArray jsonOcorrencias = jsonObject.getJSONArray("ocorrencias");
+
+                for (int i = 0; i < jsonOcorrencias.length(); i++) {
+                    JSONObject jsonOcor = jsonOcorrencias.getJSONObject(i);
+                    Ocorrencia ocor = new Ocorrencia();
+
+                    ocor.setId(jsonOcor.getInt("id"));
+                    ocor.setLatitude(jsonOcor.getDouble("latitude"));
+                    ocor.setLongitude(jsonOcor.getDouble("longitude"));
+                    ocor.setTipo(jsonOcor.getString("tipo"));
+
+                    /*
+                    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+                    Date dia = new java.sql.Date(format.parse(jsonOcor.getString("dia")).getTime());
+                    ocor.setData(dia);
+
+                    format = new SimpleDateFormat("HH:mm");
+                    Time hora = new java.sql.Time(format.parse(jsonOcor.getString("hora")).getTime());
+                    ocor.setHora(hora);
+
+                    ocor.setPertences(jsonOcor.getString("pertences"));
+                    ocor.setBoletim((jsonOcor.getString("boletim").toString().equals("1")? true : false));
+                    ocor.setAgrecao((jsonOcor.getString("agrecao").toString().equals("1")? true : false));
+                    Log.d("INFO", "Boletim: "+(ocor.isBoletim()?"s":"n") +
+                            "Agreção: "+(ocor.isAgrecao()?"s":"n"));
+
+                    ocor.setComplemento(jsonOcor.getString("complemento"));
+                    */
+
+                    ocorrencias.add(ocor);
+
+                    addMarkers(ocorrencias);
+                }
+            } else {
+                if (jsonObject.getString("erro").contains("error: nada encontrado")) {
+                    Log.d("ERROR", "naddaaaaaaaaaa");
+                }
+                Log.d("ERROR", jsonObject.getString("erro"));
+
+            }
+        } catch (Exception e) {
+            Log.d("ERROR", e.getMessage());
+        }
+    }
+
+
+    /**
+     * resultado da coleta de permissões
+    **/
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         mLocationPermissionGranted = false;
@@ -240,13 +330,25 @@ public class MapsFragment extends SupportMapFragment implements OnMapReadyCallba
         }
     }
 
-    //-----------------------------esconde teclado... era pelo menos...
-    private void hideSoftKeyboard() {
-        InputMethodManager imm = (InputMethodManager)this.getContext().getSystemService(this.getContext().INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(txtSearch.getWindowToken(), 0);
+
+
+
+
+
+    /**##########################################################################Outros##########################################################################**/
+
+    //-------------------------------0=show Ocorrencia / 1=get Coordenadas--------
+    private void changeMode() {
+        if(mode == MODE_NORMAL_VIEW) {
+
+        } else if(mode == MODE_CLICK_VIEW) {
+            //limpa marcadores no mapa
+            //esconde scroll
+        } else if(mode == MODE_THERMAL_VIEW) {
+
+        }
     }
 
-    //-------------------------------------------propriedades
     public void setMode(int mode) {
         this.mode = mode;
         changeMode();
@@ -281,4 +383,35 @@ public class MapsFragment extends SupportMapFragment implements OnMapReadyCallba
             }
         });
     }
+
+    private void hideSoftKeyboard() {
+        InputMethodManager imm = (InputMethodManager)this.getContext().getSystemService(this.getContext().INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(txtSearch.getWindowToken(), 0);
+    }
+
+    public void saveLastLocation() {
+        CacheData.SaveLastLocation(mMap.getCameraPosition().target, getContext());
+        CacheData.SaveLastZoom(mMap.getCameraPosition().zoom, getContext());
+    }
+
+    public void loadtLastLocation() {
+        LatLng latLng;
+        if((latLng = CacheData.GetLastLocation(getContext())) != null) {
+            float zoom;
+            if((zoom = CacheData.GetLastZoom(getContext())) == 0)
+                moveCamera(latLng, DEFAULT_ZOOM);
+            else
+                moveCamera(latLng, zoom);
+        }
+    }
+
+    /**
+     * Ações da activiti ou sistema
+     */
+    //verifica se google api falha
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+        Log.d("INFO", "onConnectionFailed: falha");
+    }
+
 }
