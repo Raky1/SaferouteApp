@@ -63,48 +63,30 @@
             android:layout_toEndOf="@+id/txtview_hora"
             android:timePickerMode="spinner"/>
 
-        <!-- Tipo -->
         <TextView
-            android:id="@+id/txtview_tipo"
+            android:id="@+id/txtPertences"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/timePicker"
-            android:text="@string/ocorrencia_tipo"
-            android:textSize="@dimen/text_type_size"/>
-
-        <Spinner
-            android:id="@+id/spinnerTipo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:layout_marginBottom="10dp"
-            android:layout_below="@+id/timePicker"
-            android:layout_toEndOf="@+id/txtview_tipo"/>
-
-        <!-- pertences -->
-        <TextView
-            android:id="@+id/txtview_pertences"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/spinnerTipo"
             android:text="@string/ocorrencia_pertences"
             android:textSize="@dimen/text_type_size"/>
 
-        <EditText
-            android:id="@+id/txtPertences"
+
+        <!-- Pertences -->
+        <include
+            android:id="@+id/include_select"
+            android:layout_height="wrap_content"
             android:layout_width="match_parent"
-            android:layout_height="80dp"
-            android:gravity="top"
-            android:layout_marginBottom="10dp"
-            android:layout_below="@+id/txtview_pertences"
-            android:background="@drawable/border_edittext"/>
+            layout="@layout/select_pertences"
+            android:layout_below="@+id/txtPertences"/>
+
 
         <!-- boletim -->
         <TextView
             android:id="@+id/txtview_boletim"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/txtPertences"
+            android:layout_below="@+id/include_select"
             android:text="@string/ocorrencia_boletim"
             android:textSize="@dimen/text_type_size"/>
 
@@ -114,7 +96,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
             android:layout_marginBottom="10dp"
-            android:layout_below="@+id/txtPertences"
+            android:layout_below="@+id/include_select"
             android:layout_toEndOf="@+id/txtview_boletim"/>
 
         <!-- Agreção -->

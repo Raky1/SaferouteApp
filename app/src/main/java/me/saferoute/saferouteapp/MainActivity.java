@@ -3,6 +3,8 @@ package me.saferoute.saferouteapp;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.ColorMatrix;
+import android.graphics.ColorMatrixColorFilter;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -65,34 +67,48 @@ public class MainActivity extends AppCompatActivity
         if(networkInfo == null || !networkInfo.isConnected())
             finish();
 
-        //searchs
-        txtSearch = (AutoCompleteTextView) findViewById(R.id.txtSearch);
-        btnGps = (ImageView) findViewById(R.id.icon_gps);
+
+        init();
 
         //Botões filtro
         linearLayout = (LinearLayout) findViewById(R.id.linearLayoutScrollFiltro);
         this.configButton();
 
-        init();
-
-        Log.d("Diretório", getCacheDir().getAbsolutePath());
+        //Log.d("Diretório", getCacheDir().getAbsolutePath());
     }
 
-    //configura os botões
-    private void configButton() {
-        for(int i = 0; i < linearLayout.getChildCount(); i++)
-            linearLayout.getChildAt(i).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    for(int i = 0; i < linearLayout.getChildCount(); i++)
-                        linearLayout.getChildAt(i).setBackgroundColor(Color.TRANSPARENT);
-
-                    view.setBackgroundColor(Color.rgb(100,100,100));
-                }
-            });
+    @Override
+    protected void onDestroy() {
+        mapsFragment.saveLastLocation();
+        super.onDestroy();
     }
 
+    @Override
+    protected void onStop() {
+        mapsFragment.saveLastLocation();
+        super.onStop();
+    }
+
+    @Override
+    public void onBackPressed() {
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+
+
+    /**
+     * inicialização
+     */
     private void init() {
+        //searchs
+        txtSearch = (AutoCompleteTextView) findViewById(R.id.txtSearch);
+        btnGps = (ImageView) findViewById(R.id.icon_gps);
+
         //Barra lateral de navegação...
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
@@ -132,29 +148,82 @@ public class MainActivity extends AppCompatActivity
 
     }
 
-    @Override
-    protected void onDestroy() {
-        mapsFragment.saveLastLocation();
-        super.onDestroy();
+    /**configura os botões
+     *
+     */
+    private void configButton() {
+        View.OnClickListener onClickListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int idFiltro = 0;
+
+                if(view.getId() == R.id.btnFiltroDinheiro)
+                    idFiltro = 0;
+                else if (view.getId() == R.id.btnFiltroCelular)
+                    idFiltro = 1;
+                else if (view.getId() == R.id.btnFiltroVeiculo)
+                    idFiltro = 2;
+                else if (view.getId() == R.id.btnFiltroCartao)
+                    idFiltro = 3;
+                else if (view.getId() == R.id.btnFiltroCarteiro)
+                    idFiltro = 4;
+                else if (view.getId() == R.id.btnFiltroBolsa)
+                    idFiltro = 5;
+                else if (view.getId() == R.id.btnFiltroBicicleta)
+                    idFiltro = 6;
+                else if (view.getId() == R.id.btnFiltroDocumentos)
+                    idFiltro = 7;
+                else if (view.getId() == R.id.btnFiltroOutros)
+                    idFiltro = 8;
+
+                mapsFragment.filtro[idFiltro] = !mapsFragment.filtro[idFiltro];
+
+                ColorMatrix matrix = new ColorMatrix();
+
+                if(mapsFragment.filtro[idFiltro]) {
+                    matrix.setSaturation(1);
+                    ColorMatrixColorFilter filter = new ColorMatrixColorFilter(matrix);
+                    ((ImageView)view).setColorFilter(filter);
+                } else {
+                    matrix.setSaturation(0);
+                    ColorMatrixColorFilter filter = new ColorMatrixColorFilter(matrix);
+                    ((ImageView)view).setColorFilter(filter);
+                }
+
+                mapsFragment.showMarkers();
+            }
+        };
+
+        findViewById(R.id.btnFiltroDinheiro).setOnClickListener(onClickListener);
+        findViewById(R.id.btnFiltroCelular).setOnClickListener(onClickListener);
+        findViewById(R.id.btnFiltroVeiculo).setOnClickListener(onClickListener);
+        findViewById(R.id.btnFiltroCartao).setOnClickListener(onClickListener);
+        findViewById(R.id.btnFiltroCarteiro).setOnClickListener(onClickListener);
+        findViewById(R.id.btnFiltroBolsa).setOnClickListener(onClickListener);
+        findViewById(R.id.btnFiltroBicicleta).setOnClickListener(onClickListener);
+        findViewById(R.id.btnFiltroDocumentos).setOnClickListener(onClickListener);
+        findViewById(R.id.btnFiltroOutros).setOnClickListener(onClickListener);
+
+        ColorMatrix matrix = new ColorMatrix();
+        matrix.setSaturation(0);
+        ColorMatrixColorFilter filter = new ColorMatrixColorFilter(matrix);
+        ((ImageView)findViewById(R.id.btnFiltroDinheiro)).setColorFilter(filter);
+        ((ImageView)findViewById(R.id.btnFiltroCelular)).setColorFilter(filter);
+        ((ImageView)findViewById(R.id.btnFiltroVeiculo)).setColorFilter(filter);
+        ((ImageView)findViewById(R.id.btnFiltroCartao)).setColorFilter(filter);
+        ((ImageView)findViewById(R.id.btnFiltroCarteiro)).setColorFilter(filter);
+        ((ImageView)findViewById(R.id.btnFiltroBolsa)).setColorFilter(filter);
+        ((ImageView)findViewById(R.id.btnFiltroBicicleta)).setColorFilter(filter);
+        ((ImageView)findViewById(R.id.btnFiltroDocumentos)).setColorFilter(filter);
+        ((ImageView)findViewById(R.id.btnFiltroOutros)).setColorFilter(filter);
     }
 
-    @Override
-    protected void onStop() {
-        mapsFragment.saveLastLocation();
-        super.onStop();
-    }
-
-    @Override
-    public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
-        }
-    }
-
-    //@SuppressWarnings("StatementWithEmptyBody") //acho desnecessário
+    /**
+     *  seleção de item da barra deslizante lateral
+     * @param item
+     * @return
+     */
+    @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
 
@@ -204,7 +273,11 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-    //***************chamado quando cadastrar  nova ocorrencia
+    /***************chamado quando cadastrar  nova ocorrencia
+     *
+     * @param latitude
+     * @param longitude
+     */
     public void showROcorrencia(double latitude, double longitude) {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
@@ -217,7 +290,11 @@ public class MainActivity extends AppCompatActivity
         startActivityForResult(intent,903);
     }
 
-    //***************chamado quando se coleta a posição no mode de click do fragment map
+    /***************chamado quando se coleta a posição no mode de click do fragment map
+     *
+     * @param latitude
+     * @param longitude
+     */
     public void showEditOcorrencia(double latitude, double longitude) {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
@@ -229,11 +306,16 @@ public class MainActivity extends AppCompatActivity
         intent.putExtra("mode", 1);
         intent.putExtra("id", user.getId());
         intent.putExtra("ocorrencia", ocor4Edit);
-        startActivityForResult(intent, 903);
+        startActivityForResult(intent, 904);
     }
 
 
-    //****************resposta das activits
+    /****************resposta das activits
+     *
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         //super.onActivityResult(requestCode, resultCode, data);
@@ -245,22 +327,32 @@ public class MainActivity extends AppCompatActivity
             user.setEmail(data.getStringExtra("email"));
             user.setSenha(data.getStringExtra("senha"));
             navLogar.setTitle(getResources().getString(R.string.nav_logado));
-        }
+        } else {
 
-        //Edit Ocorrencia
-        if (requestCode == 902 && resultCode == RESULT_OK) {
-            ocor4Edit = (Ocorrencia) data.getSerializableExtra("ocorrencia");
+            //Edit Ocorrencia
+            if (requestCode == 902) {
+                mapsFragment.updateMarkers();
+                if (resultCode == RESULT_OK) {
+                    ocor4Edit = (Ocorrencia) data.getSerializableExtra("ocorrencia");
 
-            DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-            drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+                    DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+                    drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
 
-            mapsFragment.setMode(2);
-        }
+                    mapsFragment.setMode(MapsFragment.MODE_CLICK_EDIT_VIEW);
+                }
+            }
 
-        //Add Ocorrencia
-        if (requestCode == 903 && resultCode == RESULT_OK) {
-            mapsFragment.addMarker((Ocorrencia) data.getSerializableExtra("ocorrencia"));
+            //Add Ocorrencia
+            if (requestCode == 903 && resultCode == RESULT_OK) {
+                mapsFragment.addMarker((Ocorrencia) data.getSerializableExtra("ocorrencia"));
+            }
+
+            //Atualiza pos edit ocorrencia
+            if (requestCode == 904 && resultCode == RESULT_OK) {
+                mapsFragment.updateMarkers();
+            }
         }
 
     }
+
 }

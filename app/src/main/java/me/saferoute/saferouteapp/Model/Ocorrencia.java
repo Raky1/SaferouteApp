@@ -1,7 +1,12 @@
 package me.saferoute.saferouteapp.Model;
 
+import android.util.Log;
+
 import com.google.android.gms.maps.model.LatLng;
 import com.google.maps.android.clustering.ClusterItem;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.Serializable;
 import java.sql.Time;
@@ -17,9 +22,10 @@ public class Ocorrencia implements Serializable, ClusterItem {
 
     private int id;
     private double latitude, longitude;
-    private String tipo, complemento, pertences;
+    private String complemento;
     private Date data;
     private Time hora;
+    private boolean dinheiro, celular, veiculo, cartao, carteira, bolsa, bicicleta, documentos, outros;
     private boolean boletim, agrecao;
 
     @Override
@@ -34,7 +40,82 @@ public class Ocorrencia implements Serializable, ClusterItem {
 
         format = new SimpleDateFormat("HH:mm");
         String tempo = format.format(hora);
-        return this.id + ": " + this.tipo + " [" + dia +"] ["+tempo+"]";
+        return this.id + ": " + " [" + dia +"] ["+tempo+"] " +
+                (dinheiro ? "1" : "0") + "|" +
+                (celular ? "1" : "0") + "|" +
+                (veiculo ? "1" : "0") + "|" +
+                (cartao ? "1" : "0") + "|" +
+                (carteira ? "1" : "0") + "|" +
+                (bolsa ? "1" : "0") + "|" +
+                (bicicleta ? "1" : "0") + "|" +
+                (documentos ? "1" : "0") + "|" +
+                (outros ? "1" : "0");
+    }
+
+    public void setFromJSON(JSONObject jsonOcor) {
+        try {
+            id = jsonOcor.getInt("id");
+            latitude =jsonOcor.getDouble("latitude");
+            longitude = jsonOcor.getDouble("longitude");
+
+            dinheiro = jsonOcor.getString("dinheiro").equals("1");
+            celular = jsonOcor.getString("celular").equals("1");
+            veiculo = jsonOcor.getString("veiculo").equals("1");
+            cartao = jsonOcor.getString("cartao").equals("1");
+            carteira = jsonOcor.getString("carteira").equals("1");
+            bolsa = jsonOcor.getString("bolsa").equals("1");
+            bicicleta = jsonOcor.getString("bicicleta").equals("1");
+            documentos = jsonOcor.getString("documentos").equals("1");
+            outros = jsonOcor.getString("outros").equals("1");
+
+
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+            data = new java.sql.Date(format.parse(jsonOcor.getString("dia")).getTime());
+
+            format = new SimpleDateFormat("HH:mm");
+            hora = new java.sql.Time(format.parse(jsonOcor.getString("hora")).getTime());
+
+            boletim = jsonOcor.getString("boletim").equals("1");
+            agrecao = jsonOcor.getString("agrecao").equals("1");
+
+            complemento = jsonOcor.getString("complemento");
+
+        } catch (Exception e) {
+            Log.d("ERROR", e.getMessage());
+        }
+    }
+
+    public void setPartialFromJSON(JSONObject jsonOcor) {
+        try {
+            id = jsonOcor.getInt("id");
+            latitude =jsonOcor.getDouble("latitude");
+            longitude = jsonOcor.getDouble("longitude");
+
+            dinheiro = jsonOcor.getString("dinheiro").equals("1");
+            celular = jsonOcor.getString("celular").equals("1");
+            veiculo = jsonOcor.getString("veiculo").equals("1");
+            cartao = jsonOcor.getString("cartao").equals("1");
+            carteira = jsonOcor.getString("carteira").equals("1");
+            bolsa = jsonOcor.getString("bolsa").equals("1");
+            bicicleta = jsonOcor.getString("bicicleta").equals("1");
+            documentos = jsonOcor.getString("documentos").equals("1");
+            outros = jsonOcor.getString("outros").equals("1");
+
+
+            /*SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+            data = new java.sql.Date(format.parse(jsonOcor.getString("dia")).getTime());
+
+            format = new SimpleDateFormat("HH:mm");
+            hora = new java.sql.Time(format.parse(jsonOcor.getString("hora")).getTime());
+
+            boletim = jsonOcor.getString("boletim").equals("1");
+            agrecao = jsonOcor.getString("agrecao").equals("1");
+
+            complemento = jsonOcor.getString("complemento");*/
+
+        } catch (Exception e) {
+            Log.d("ERROR", e.getMessage());
+        }
     }
 
 
@@ -47,8 +128,35 @@ public class Ocorrencia implements Serializable, ClusterItem {
     public double getLongitude() { return longitude; }
     public void setLongitude(double longitude) { this.longitude = longitude; }
 
-    public String getTipo() { return tipo; }
-    public void setTipo(String tipo) { this.tipo = tipo; }
+    //pertences
+    public boolean isDinheiro() { return dinheiro; }
+    public void setDinheiro(boolean dinheiro) { this.dinheiro = dinheiro; }
+
+    public boolean isCelular() { return celular; }
+    public void setCelular(boolean celular) { this.celular = celular; }
+
+    public boolean isVeiculo() { return veiculo; }
+    public void setVeiculo(boolean veiculo) { this.veiculo = veiculo; }
+
+    public boolean isCartao() { return cartao; }
+    public void setCartao(boolean cartao) { this.cartao = cartao; }
+
+    public boolean isCarteira() { return carteira; }
+    public void setCarteira(boolean carteira) { this.carteira = carteira; }
+
+    public boolean isBolsa() { return bolsa; }
+    public void setBolsa(boolean bolsa) {  this.bolsa = bolsa; }
+
+    public boolean isBicicleta() { return bicicleta; }
+    public void setBicicleta(boolean bicicleta) { this.bicicleta = bicicleta; }
+
+    public boolean isDocumentos() { return documentos; }
+    public void setDocumentos(boolean documentos) { this.documentos = documentos; }
+
+    public boolean isOutros() { return outros; }
+    public void setOutros(boolean outros) { this.outros = outros; }
+
+    //-----
 
     public String getComplemento() { return complemento; }
     public void setComplemento(String complemento) { this.complemento = complemento; }
@@ -65,7 +173,5 @@ public class Ocorrencia implements Serializable, ClusterItem {
     public boolean isAgrecao() { return agrecao; }
     public void setAgrecao(boolean agrecao) { this.agrecao = agrecao; }
 
-    public String getPertences() { return pertences; }
-    public void setPertences(String pertences) { this.pertences = pertences; }
 
 }

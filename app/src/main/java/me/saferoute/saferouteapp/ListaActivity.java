@@ -136,26 +136,7 @@ public class ListaActivity extends Activity implements AsyncResponse {
                         JSONObject jsonOcor = jsonOcorrencias.getJSONObject(i);
                         Ocorrencia ocor = new Ocorrencia();
 
-                        ocor.setId(jsonOcor.getInt("id"));
-                        ocor.setLatitude(jsonOcor.getDouble("latitude"));
-                        ocor.setLongitude(jsonOcor.getDouble("longitude"));
-                        ocor.setTipo(jsonOcor.getString("tipo"));
-
-                        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-                        Date dia = new java.sql.Date(format.parse(jsonOcor.getString("dia")).getTime());
-                        ocor.setData(dia);
-
-                        format = new SimpleDateFormat("HH:mm");
-                        Time hora = new java.sql.Time(format.parse(jsonOcor.getString("hora")).getTime());
-                        ocor.setHora(hora);
-
-                        ocor.setPertences(jsonOcor.getString("pertences"));
-                        ocor.setBoletim((jsonOcor.getString("boletim").toString().equals("1")? true : false));
-                        ocor.setAgrecao((jsonOcor.getString("agrecao").toString().equals("1")? true : false));
-                        Log.d("INFO", "Boletim: "+(ocor.isBoletim()?"s":"n") +
-                                "Agreção: "+(ocor.isAgrecao()?"s":"n"));
-
-                        ocor.setComplemento(jsonOcor.getString("complemento"));
+                        ocor.setFromJSON(jsonOcor);
 
                         ocorrencias.add(ocor);
                     }

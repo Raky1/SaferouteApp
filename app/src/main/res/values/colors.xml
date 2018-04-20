@@ -8,4 +8,5 @@
     <color name="backgroundtransparents" >#00000000</color>
     <color name="link">#5b9fff</color>
     <color name="edittext_border">#AAA</color>
+    <color name="txt_color_black">#000</color>
 </resources>

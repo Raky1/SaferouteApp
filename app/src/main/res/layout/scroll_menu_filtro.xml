@@ -11,58 +11,65 @@
         android:orientation="horizontal">
 
         <ImageView
-            android:id="@+id/btnBicicleta"
+            android:id="@+id/btnFiltroDinheiro"
+            android:layout_width="@dimen/size_icon_filtro"
+            android:layout_height="@dimen/size_icon_filtro"
+            android:src="@drawable/ic_money"
+            android:padding="@dimen/padding_icon_filtro"/>
+
+        <ImageView
+            android:id="@+id/btnFiltroCelular"
+            android:layout_width="@dimen/size_icon_filtro"
+            android:layout_height="@dimen/size_icon_filtro"
+            android:src="@drawable/ic_cel"
+            android:padding="@dimen/padding_icon_filtro"/>
+
+        <ImageView
+            android:id="@+id/btnFiltroVeiculo"
+            android:layout_width="@dimen/size_icon_filtro"
+            android:layout_height="@dimen/size_icon_filtro"
+            android:src="@drawable/ic_gps"
+            android:padding="@dimen/padding_icon_filtro"/>
+
+        <ImageView
+            android:id="@+id/btnFiltroCartao"
+            android:layout_width="@dimen/size_icon_filtro"
+            android:layout_height="@dimen/size_icon_filtro"
+            android:src="@drawable/ic_cartao"
+            android:padding="@dimen/padding_icon_filtro"/>
+
+        <ImageView
+            android:id="@+id/btnFiltroCarteiro"
+            android:layout_width="@dimen/size_icon_filtro"
+            android:layout_height="@dimen/size_icon_filtro"
+            android:src="@drawable/ic_homemarker"
+            android:padding="@dimen/padding_icon_filtro"/>
+
+        <ImageView
+            android:id="@+id/btnFiltroBolsa"
+            android:layout_width="@dimen/size_icon_filtro"
+            android:layout_height="@dimen/size_icon_filtro"
+            android:src="@drawable/ic_mochila"
+            android:padding="@dimen/padding_icon_filtro"/>
+
+        <ImageView
+            android:id="@+id/btnFiltroBicicleta"
             android:layout_width="@dimen/size_icon_filtro"
             android:layout_height="@dimen/size_icon_filtro"
             android:src="@drawable/ic_bicicleta"
             android:padding="@dimen/padding_icon_filtro"/>
+
         <ImageView
-            android:id="@+id/btnCartao"
+            android:id="@+id/btnFiltroDocumentos"
             android:layout_width="@dimen/size_icon_filtro"
             android:layout_height="@dimen/size_icon_filtro"
-            android:background="@null"
-            android:src="@drawable/ic_cartao"
-            android:padding="@dimen/padding_icon_filtro"/>
-        <ImageView
-            android:id="@+id/btnCel"
-            android:layout_width="@dimen/size_icon_filtro"
-            android:layout_height="@dimen/size_icon_filtro"
-            android:background="@null"
-            android:src="@drawable/ic_cel"
-            android:padding="@dimen/padding_icon_filtro"/>
-        <ImageView
-            android:id="@+id/btnDocumento"
-            android:layout_width="@dimen/size_icon_filtro"
-            android:layout_height="@dimen/size_icon_filtro"
-            android:background="@null"
             android:src="@drawable/ic_documento"
             android:padding="@dimen/padding_icon_filtro"/>
+
         <ImageView
-            android:id="@+id/btnMochila"
+            android:id="@+id/btnFiltroOutros"
             android:layout_width="@dimen/size_icon_filtro"
             android:layout_height="@dimen/size_icon_filtro"
-            android:background="@null"
-            android:src="@drawable/ic_mochila"
-            android:padding="@dimen/padding_icon_filtro"/>
-        <ImageView
-            android:id="@+id/btnMoney"
-            android:layout_width="@dimen/size_icon_filtro"
-            android:layout_height="@dimen/size_icon_filtro"
-            android:background="@null"
-            android:src="@drawable/ic_money"
-            android:padding="@dimen/padding_icon_filtro"/>
-        <ImageView
-            android:id="@+id/btnPc"
-            android:layout_width="@dimen/size_icon_filtro"
-            android:layout_height="@dimen/size_icon_filtro"
-            android:background="@null"
-            android:src="@drawable/ic_pc"
-            android:padding="@dimen/padding_icon_filtro"/>
-        <ImageView
-            android:id="@+id/btnPlus"
-            android:layout_width="@dimen/size_icon_filtro"
-            android:layout_height="@dimen/size_icon_filtro"
-            android:background="@null"
             android:src="@drawable/ic_plus"
             android:padding="@dimen/padding_icon_filtro"/>
 

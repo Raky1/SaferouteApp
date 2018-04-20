@@ -8,8 +8,16 @@
     <dimen name="padding_icon_filtro">15dp</dimen>
     <dimen name="size_icon_filtro">55dp</dimen>
 
-
+    <!-- dialogs -->
     <dimen name="text_title_size">25sp</dimen>
     <dimen name="text_type_size">20sp</dimen>
     <dimen name="text_info_size">15sp</dimen>
+
+
+    <!-- select pertences -->
+    <dimen name="select_img_margin">5dp</dimen>
+    <dimen name="select_img_paddin">5dp</dimen>
+    <dimen name="select_img_text">20sp</dimen>
+    <dimen name="select_img_dimen">35dp</dimen>
+
 </resources>

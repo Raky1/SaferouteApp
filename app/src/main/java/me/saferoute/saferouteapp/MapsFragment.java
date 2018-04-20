@@ -35,6 +35,7 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.maps.android.clustering.ClusterManager;
+import com.google.maps.android.clustering.algo.NonHierarchicalDistanceBasedAlgorithm;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -47,6 +48,7 @@ import me.saferoute.saferouteapp.DAO.AsyncResponse;
 import me.saferoute.saferouteapp.DAO.RequestData;
 import me.saferoute.saferouteapp.Model.Ocorrencia;
 import me.saferoute.saferouteapp.Tools.CacheData;
+import me.saferoute.saferouteapp.Tools.CustomClusterRender;
 import me.saferoute.saferouteapp.Tools.PlaceAutoCompleteAdapter;
 
 public class MapsFragment extends SupportMapFragment implements OnMapReadyCallback,
@@ -55,7 +57,8 @@ public class MapsFragment extends SupportMapFragment implements OnMapReadyCallba
     //modos
     public static final int MODE_NORMAL_VIEW = 0;
     public static final int MODE_CLICK_VIEW = 1;
-    public static final int MODE_THERMAL_VIEW = 2;
+    public static final int MODE_CLICK_EDIT_VIEW = 2;
+    public static final int MODE_THERMAL_VIEW = 3;
     private int mode = 0;
 
     private static final String URL_OCORRENCIAS = "http://saferoute.me/php/mExecutor/mExecOcorrencia.php";
@@ -81,7 +84,9 @@ public class MapsFragment extends SupportMapFragment implements OnMapReadyCallba
     private AutoCompleteTextView txtSearch;
     private ImageView btnGps;
 
-    //private List<Ocorrencia> ocorrencias;
+    //Ocorrencias e controle de filtro
+    private List<Ocorrencia> ocorrencias;
+    protected boolean[] filtro = {false, false, false, false, false, false, false, false, false};
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -126,8 +131,12 @@ public class MapsFragment extends SupportMapFragment implements OnMapReadyCallba
             mMap.getUiSettings().setMyLocationButtonEnabled(false);
         }
 
+        //gerenciador de
+
         //Cluster manager
         mClusterManager = new ClusterManager<Ocorrencia>(getContext(), mMap);
+
+        mClusterManager.setRenderer(new CustomClusterRender(getContext(), mMap, mClusterManager));
         mMap.setOnCameraIdleListener(mClusterManager);
         mMap.setOnMarkerClickListener(mClusterManager);
 
@@ -142,11 +151,11 @@ public class MapsFragment extends SupportMapFragment implements OnMapReadyCallba
     @Override
     public void onMapClick(LatLng latLng) {
         Log.d("INFO", "click on map");
-        if(mode==1) {
+        if(mode==MODE_CLICK_VIEW) {
             MainActivity activity = (MainActivity) getActivity();
             activity.showROcorrencia(latLng.latitude, latLng.longitude);
             setMode(0);
-        } else if (mode==2) {
+        } else if (mode==MODE_CLICK_EDIT_VIEW) {
             MainActivity activity = (MainActivity) getActivity();
             activity.showEditOcorrencia(latLng.latitude, latLng.longitude);
             setMode(0);
@@ -238,17 +247,11 @@ public class MapsFragment extends SupportMapFragment implements OnMapReadyCallba
      * adiciona e atualiza markadores
      */
     public void addMarker(Ocorrencia ocorrencia) {
-        mClusterManager.addItem(ocorrencia);
-        mClusterManager.cluster();
+        ocorrencias.add(ocorrencia);
+        showMarkers();
     }
 
-    public void addMarkers(List<Ocorrencia> ocorrencias) {
-        mClusterManager.clearItems();
-        mClusterManager.addItems(ocorrencias);
-        mClusterManager.cluster();
-    }
-
-    private void updateMarkers() {
+    public void updateMarkers() {
         requestData = new RequestData();
         requestData.delegate = this;
 
@@ -257,12 +260,35 @@ public class MapsFragment extends SupportMapFragment implements OnMapReadyCallba
         requestData.execute(URL_OCORRENCIAS, parametros);
     }
 
+    public void showMarkers() {
+        mClusterManager.clearItems();
+        if(!filtro[0] && !filtro[1] && !filtro[2] && !filtro[3] && !filtro[4] && !filtro[5] && !filtro[6] && !filtro[7] && !filtro[8]) {
+            mClusterManager.addItems(ocorrencias);
+        } else {
+            for(Ocorrencia o : ocorrencias) {
+
+                if ((filtro[0] && o.isDinheiro()) ||
+                        (filtro[1] && o.isCelular()) ||
+                        (filtro[2] && o.isVeiculo()) ||
+                        (filtro[3] && o.isCartao()) ||
+                        (filtro[4] && o.isCarteira()) ||
+                        (filtro[5] && o.isBolsa()) ||
+                        (filtro[6] && o.isBicicleta()) ||
+                        (filtro[7] && o.isDocumentos()) ||
+                        (filtro[8] && o.isOutros()))
+                    mClusterManager.addItem(o);
+            }
+        }
+
+        mClusterManager.cluster();
+    }
+
     @Override
     public void processFinish(String result) {
         Log.d("INFO", result);
         try {
             JSONObject jsonObject = new JSONObject(result);
-            List<Ocorrencia> ocorrencias = new ArrayList<Ocorrencia>();
+            this.ocorrencias = new ArrayList<Ocorrencia>();
 
             if (jsonObject.getBoolean("resultado")) {
                 JSONArray jsonOcorrencias = jsonObject.getJSONArray("ocorrencias");
@@ -271,39 +297,16 @@ public class MapsFragment extends SupportMapFragment implements OnMapReadyCallba
                     JSONObject jsonOcor = jsonOcorrencias.getJSONObject(i);
                     Ocorrencia ocor = new Ocorrencia();
 
-                    ocor.setId(jsonOcor.getInt("id"));
-                    ocor.setLatitude(jsonOcor.getDouble("latitude"));
-                    ocor.setLongitude(jsonOcor.getDouble("longitude"));
-                    ocor.setTipo(jsonOcor.getString("tipo"));
+                    ocor.setPartialFromJSON(jsonOcor);
 
-                    /*
-                    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-                    Date dia = new java.sql.Date(format.parse(jsonOcor.getString("dia")).getTime());
-                    ocor.setData(dia);
-
-                    format = new SimpleDateFormat("HH:mm");
-                    Time hora = new java.sql.Time(format.parse(jsonOcor.getString("hora")).getTime());
-                    ocor.setHora(hora);
-
-                    ocor.setPertences(jsonOcor.getString("pertences"));
-                    ocor.setBoletim((jsonOcor.getString("boletim").toString().equals("1")? true : false));
-                    ocor.setAgrecao((jsonOcor.getString("agrecao").toString().equals("1")? true : false));
-                    Log.d("INFO", "Boletim: "+(ocor.isBoletim()?"s":"n") +
-                            "Agreção: "+(ocor.isAgrecao()?"s":"n"));
-
-                    ocor.setComplemento(jsonOcor.getString("complemento"));
-                    */
-
-                    ocorrencias.add(ocor);
-
-                    addMarkers(ocorrencias);
+                    this.ocorrencias.add(ocor);
+                    showMarkers();
                 }
             } else {
                 if (jsonObject.getString("erro").contains("error: nada encontrado")) {
                     Log.d("ERROR", "naddaaaaaaaaaa");
                 }
                 Log.d("ERROR", jsonObject.getString("erro"));
-
             }
         } catch (Exception e) {
             Log.d("ERROR", e.getMessage());
