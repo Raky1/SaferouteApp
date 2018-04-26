@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
@@ -32,10 +33,10 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.maps.android.clustering.ClusterManager;
-import com.google.maps.android.clustering.algo.NonHierarchicalDistanceBasedAlgorithm;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -44,11 +45,15 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import me.saferoute.saferouteapp.CustomCluster.CustomClickInfoWindow;
 import me.saferoute.saferouteapp.DAO.AsyncResponse;
 import me.saferoute.saferouteapp.DAO.RequestData;
 import me.saferoute.saferouteapp.Model.Ocorrencia;
 import me.saferoute.saferouteapp.Tools.CacheData;
-import me.saferoute.saferouteapp.Tools.CustomClusterRender;
+import me.saferoute.saferouteapp.CustomCluster.CustomClickCluster;
+import me.saferoute.saferouteapp.CustomCluster.CustomClickItemCluster;
+import me.saferoute.saferouteapp.CustomCluster.CustomClusterRender;
+import me.saferoute.saferouteapp.CustomCluster.CustomInfoViewAdapter;
 import me.saferoute.saferouteapp.Tools.PlaceAutoCompleteAdapter;
 
 public class MapsFragment extends SupportMapFragment implements OnMapReadyCallback,
@@ -85,6 +90,7 @@ public class MapsFragment extends SupportMapFragment implements OnMapReadyCallba
     private ImageView btnGps;
 
     //Ocorrencias e controle de filtro
+    private LatLng locationMarker;
     private List<Ocorrencia> ocorrencias;
     protected boolean[] filtro = {false, false, false, false, false, false, false, false, false};
 
@@ -129,20 +135,25 @@ public class MapsFragment extends SupportMapFragment implements OnMapReadyCallba
 
             mMap.setMyLocationEnabled(true);
             mMap.getUiSettings().setMyLocationButtonEnabled(false);
+            mMap.getUiSettings().setMapToolbarEnabled(false);
+            mMap.getUiSettings().setCompassEnabled(false);
         }
-
-        //gerenciador de
 
         //Cluster manager
         mClusterManager = new ClusterManager<Ocorrencia>(getContext(), mMap);
-
         mClusterManager.setRenderer(new CustomClusterRender(getContext(), mMap, mClusterManager));
+        mClusterManager.setOnClusterItemClickListener(new CustomClickItemCluster(getContext()));
+        mClusterManager.setOnClusterClickListener(new CustomClickCluster(getContext()));
+        mClusterManager.getMarkerCollection().setOnInfoWindowAdapter(new CustomInfoViewAdapter(LayoutInflater.from(getContext())));
+        mClusterManager.setOnClusterItemInfoWindowClickListener(new CustomClickInfoWindow(LayoutInflater.from(getContext())));
+
         mMap.setOnCameraIdleListener(mClusterManager);
         mMap.setOnMarkerClickListener(mClusterManager);
+        mMap.setInfoWindowAdapter(mClusterManager.getMarkerManager());
 
         updateMarkers();
 
-        loadtLastLocation();
+        loadLastLocation();
     }
 
     /**
@@ -152,13 +163,23 @@ public class MapsFragment extends SupportMapFragment implements OnMapReadyCallba
     public void onMapClick(LatLng latLng) {
         Log.d("INFO", "click on map");
         if(mode==MODE_CLICK_VIEW) {
-            MainActivity activity = (MainActivity) getActivity();
+            this.locationMarker = latLng;
+            mMap.clear();
+            mMap.addMarker(new MarkerOptions().position(latLng).snippet("Localização"));
+            MainActivity mainActivity = (MainActivity) getActivity();
+            mainActivity.setEnableBtnConfirmLoc(true, 0);
+            /*MainActivity activity = (MainActivity) getActivity();
             activity.showROcorrencia(latLng.latitude, latLng.longitude);
-            setMode(0);
+            setMode(0);*/
         } else if (mode==MODE_CLICK_EDIT_VIEW) {
-            MainActivity activity = (MainActivity) getActivity();
+            this.locationMarker = latLng;
+            mMap.clear();
+            mMap.addMarker(new MarkerOptions().position(latLng).snippet("Localização"));
+            MainActivity mainActivity = (MainActivity) getActivity();
+            mainActivity.setEnableBtnConfirmLoc(true, 1);
+            /*MainActivity activity = (MainActivity) getActivity();
             activity.showEditOcorrencia(latLng.latitude, latLng.longitude);
-            setMode(0);
+            setMode(0);*/
         }
     }
 
@@ -266,7 +287,6 @@ public class MapsFragment extends SupportMapFragment implements OnMapReadyCallba
             mClusterManager.addItems(ocorrencias);
         } else {
             for(Ocorrencia o : ocorrencias) {
-
                 if ((filtro[0] && o.isDinheiro()) ||
                         (filtro[1] && o.isCelular()) ||
                         (filtro[2] && o.isVeiculo()) ||
@@ -297,7 +317,7 @@ public class MapsFragment extends SupportMapFragment implements OnMapReadyCallba
                     JSONObject jsonOcor = jsonOcorrencias.getJSONObject(i);
                     Ocorrencia ocor = new Ocorrencia();
 
-                    ocor.setPartialFromJSON(jsonOcor);
+                    ocor.setFromJSON(jsonOcor);
 
                     this.ocorrencias.add(ocor);
                     showMarkers();
@@ -341,20 +361,25 @@ public class MapsFragment extends SupportMapFragment implements OnMapReadyCallba
     /**##########################################################################Outros##########################################################################**/
 
     //-------------------------------0=show Ocorrencia / 1=get Coordenadas--------
-    private void changeMode() {
+    public void setMode(int mode) {
+        this.mode = mode;
+        MainActivity mainActivity = (MainActivity) this.getActivity();
         if(mode == MODE_NORMAL_VIEW) {
-
-        } else if(mode == MODE_CLICK_VIEW) {
-            //limpa marcadores no mapa
-            //esconde scroll
+            mMap.clear();
+            updateMarkers();
+            mainActivity.setBtnConfirmLoc(View.GONE);
+            mainActivity.setViewScroll(View.VISIBLE);
+        } else if(mode == MODE_CLICK_VIEW || mode == MODE_CLICK_EDIT_VIEW) {
+            mMap.clear();
+            mClusterManager.clearItems();
+            mClusterManager.cluster();
+            mainActivity.setBtnConfirmLoc(View.VISIBLE);
+            mainActivity.setViewScroll(View.GONE);
+            mainActivity.setEnableBtnConfirmLoc(false, -1);
+            locationMarker = null;
         } else if(mode == MODE_THERMAL_VIEW) {
 
         }
-    }
-
-    public void setMode(int mode) {
-        this.mode = mode;
-        changeMode();
     }
 
 
@@ -377,6 +402,10 @@ public class MapsFragment extends SupportMapFragment implements OnMapReadyCallba
         });
     }
 
+    public LatLng getLocationMarker() {
+        return locationMarker;
+    }
+
     public void setBtnGps(ImageView btnGps) {
         this.btnGps = btnGps;
         this.btnGps.setOnClickListener(new View.OnClickListener() {
@@ -389,6 +418,7 @@ public class MapsFragment extends SupportMapFragment implements OnMapReadyCallba
 
     private void hideSoftKeyboard() {
         InputMethodManager imm = (InputMethodManager)this.getContext().getSystemService(this.getContext().INPUT_METHOD_SERVICE);
+        assert imm != null;
         imm.hideSoftInputFromWindow(txtSearch.getWindowToken(), 0);
     }
 
@@ -397,7 +427,7 @@ public class MapsFragment extends SupportMapFragment implements OnMapReadyCallba
         CacheData.SaveLastZoom(mMap.getCameraPosition().zoom, getContext());
     }
 
-    public void loadtLastLocation() {
+    public void loadLastLocation() {
         LatLng latLng;
         if((latLng = CacheData.GetLastLocation(getContext())) != null) {
             float zoom;

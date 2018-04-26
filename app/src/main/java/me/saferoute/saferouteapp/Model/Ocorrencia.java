@@ -1,5 +1,6 @@
 package me.saferoute.saferouteapp.Model;
 
+import android.annotation.SuppressLint;
 import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
@@ -33,6 +34,7 @@ public class Ocorrencia implements Serializable, ClusterItem {
         return new LatLng(latitude, longitude);
     }
 
+    @SuppressLint("SimpleDateFormat")
     @Override
     public String toString() {
         SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
@@ -40,16 +42,25 @@ public class Ocorrencia implements Serializable, ClusterItem {
 
         format = new SimpleDateFormat("HH:mm");
         String tempo = format.format(hora);
-        return this.id + ": " + " [" + dia +"] ["+tempo+"] " +
-                (dinheiro ? "1" : "0") + "|" +
-                (celular ? "1" : "0") + "|" +
-                (veiculo ? "1" : "0") + "|" +
-                (cartao ? "1" : "0") + "|" +
-                (carteira ? "1" : "0") + "|" +
-                (bolsa ? "1" : "0") + "|" +
-                (bicicleta ? "1" : "0") + "|" +
-                (documentos ? "1" : "0") + "|" +
-                (outros ? "1" : "0");
+        String info = dia +"*"+tempo+"*" +
+                (dinheiro ? "1" : "0") + "*" +
+                (celular ? "1" : "0") + "*" +
+                (veiculo ? "1" : "0") + "*" +
+                (cartao ? "1" : "0") + "*" +
+                (carteira ? "1" : "0") + "*" +
+                (bolsa ? "1" : "0") + "*" +
+                (bicicleta ? "1" : "0") + "*" +
+                (documentos ? "1" : "0") + "*" +
+                (outros ? "1" : "0") + "*";
+
+
+        int numeroHora = Integer.parseInt((tempo.split(":"))[0]);
+        if(numeroHora > 5 && numeroHora < 18)
+            info+= "0";
+        else
+            info+= "1";
+
+        return info;
     }
 
     public void setFromJSON(JSONObject jsonOcor) {

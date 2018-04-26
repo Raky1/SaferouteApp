@@ -2,7 +2,8 @@
 <HorizontalScrollView
     xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/backgroundtransparentscroll">
+    android:background="@color/backgroundtransparentscroll"
+    android:id="@+id/scrollFiltro">
 
     <LinearLayout
         android:id="@+id/linearLayoutScrollFiltro"
@@ -28,7 +29,7 @@
             android:id="@+id/btnFiltroVeiculo"
             android:layout_width="@dimen/size_icon_filtro"
             android:layout_height="@dimen/size_icon_filtro"
-            android:src="@drawable/ic_gps"
+            android:src="@drawable/ic_veiculo"
             android:padding="@dimen/padding_icon_filtro"/>
 
         <ImageView
@@ -42,7 +43,7 @@
             android:id="@+id/btnFiltroCarteiro"
             android:layout_width="@dimen/size_icon_filtro"
             android:layout_height="@dimen/size_icon_filtro"
-            android:src="@drawable/ic_homemarker"
+            android:src="@drawable/ic_carteira"
             android:padding="@dimen/padding_icon_filtro"/>
 
         <ImageView

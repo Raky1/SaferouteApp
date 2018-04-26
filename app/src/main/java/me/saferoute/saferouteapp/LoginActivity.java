@@ -128,6 +128,8 @@ public class LoginActivity extends Activity implements AsyncResponse{
             CacheData.SaveEmail(txtEmail.getText().toString(), this);
 
             finish();
+        } else {
+            Toast.makeText(this, "Email ou senha incorretos", Toast.LENGTH_SHORT).show();
         }
     }
 

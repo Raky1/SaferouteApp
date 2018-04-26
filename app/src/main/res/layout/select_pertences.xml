@@ -49,7 +49,7 @@
         android:id="@+id/select_img_veiculo"
         android:layout_width="@dimen/select_img_dimen"
         android:layout_height="@dimen/select_img_dimen"
-        android:src="@drawable/ic_gps"
+        android:src="@drawable/ic_veiculo"
         android:padding="@dimen/select_img_paddin"
         android:layout_alignParentLeft="true"
         android:layout_below="@id/select_img_celular"/>
@@ -85,7 +85,7 @@
         android:id="@+id/select_img_carteira"
         android:layout_width="@dimen/select_img_dimen"
         android:layout_height="@dimen/select_img_dimen"
-        android:src="@drawable/ic_homemarker"
+        android:src="@drawable/ic_carteira"
         android:padding="@dimen/select_img_paddin"
         android:layout_alignParentLeft="true"
         android:layout_below="@id/select_img_cartao"/>

@@ -1,11 +1,15 @@
 <resources>
     <string name="app_name">Saferoute</string>
+    <string name="site_app">www.saferoute.me</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="action_settings">Settings</string>
     <string name="title_activity_login">Sign in</string>
+
+    <string name="alert_connection">Sem Conexão!</string>
+    <string name="OK_Text">OK</string>
 
     <!-- Menu Drawer View-->
     <string name="nav_logar">Logar</string>

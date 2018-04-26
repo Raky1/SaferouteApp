@@ -24,8 +24,10 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TimePicker;
 
@@ -49,7 +51,9 @@ public class MainActivity extends AppCompatActivity
 
     //scroll e mapbtn
     private MenuItem navLogar;
+    private HorizontalScrollView scrollViewFiltro;
     private LinearLayout linearLayout;
+    private Button btnConfirmaLoc;
     private ImageView btnGps;
     private AutoCompleteTextView txtSearch;
 
@@ -60,13 +64,6 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        //Verifica conectividade com internet
-        ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
-        if(networkInfo == null || !networkInfo.isConnected())
-            finish();
-
 
         init();
 
@@ -152,6 +149,10 @@ public class MainActivity extends AppCompatActivity
      *
      */
     private void configButton() {
+
+        scrollViewFiltro = (HorizontalScrollView) findViewById(R.id.scrollFiltro);
+        btnConfirmaLoc = (Button) findViewById(R.id.btnConfirmaLoc);
+
         View.OnClickListener onClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -218,6 +219,42 @@ public class MainActivity extends AppCompatActivity
         ((ImageView)findViewById(R.id.btnFiltroOutros)).setColorFilter(filter);
     }
 
+    public void setViewScroll(int mode) {
+        scrollViewFiltro.setVisibility(mode);
+    }
+
+    public void setBtnConfirmLoc(int mode) {
+        btnConfirmaLoc.setVisibility(mode);
+    }
+
+    public void setEnableBtnConfirmLoc(boolean enable, int mode) {
+        btnConfirmaLoc.setEnabled(enable);
+        if(enable)
+            btnConfirmaLoc.setText("Confirmar Localização");
+        else
+            btnConfirmaLoc.setText("Selecione a Localização");
+
+        if(mode == 0) {
+            btnConfirmaLoc.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (mapsFragment.getLocationMarker() != null)
+                        showAddOcorrencia(mapsFragment.getLocationMarker().latitude, mapsFragment.getLocationMarker().longitude);
+                    mapsFragment.setMode(MapsFragment.MODE_NORMAL_VIEW);
+                }
+            });
+        } else if(mode==1) {
+            btnConfirmaLoc.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (mapsFragment.getLocationMarker() != null)
+                        showEditOcorrencia(mapsFragment.getLocationMarker().latitude, mapsFragment.getLocationMarker().longitude);
+                    mapsFragment.setMode(MapsFragment.MODE_NORMAL_VIEW);
+                }
+            });
+        }
+    }
+
     /**
      *  seleção de item da barra deslizante lateral
      * @param item
@@ -278,7 +315,7 @@ public class MainActivity extends AppCompatActivity
      * @param latitude
      * @param longitude
      */
-    public void showROcorrencia(double latitude, double longitude) {
+    public void showAddOcorrencia(double latitude, double longitude) {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
 
@@ -331,7 +368,7 @@ public class MainActivity extends AppCompatActivity
 
             //Edit Ocorrencia
             if (requestCode == 902) {
-                mapsFragment.updateMarkers();
+                //mapsFragment.updateMarkers();
                 if (resultCode == RESULT_OK) {
                     ocor4Edit = (Ocorrencia) data.getSerializableExtra("ocorrencia");
 
@@ -339,6 +376,8 @@ public class MainActivity extends AppCompatActivity
                     drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
 
                     mapsFragment.setMode(MapsFragment.MODE_CLICK_EDIT_VIEW);
+                } else {
+                    mapsFragment.updateMarkers();
                 }
             }
 

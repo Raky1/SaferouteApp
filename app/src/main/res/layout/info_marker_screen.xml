@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="5dp"
+    android:background="@drawable/white_background_info_window">
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/info_text_data"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
+            android:textSize="@dimen/info_text_size"
+            android:text="00/00/0000"/>
+        <TextView
+            android:id="@+id/info_text_hora"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/info_text_size"
+            android:text="00:00"/>
+        <ImageView
+            android:id="@+id/info_img_dia_noite"
+            android:layout_width="@dimen/info_img_dimen"
+            android:layout_height="@dimen/info_img_dimen"
+            android:padding="@dimen/info_paddin"
+            android:src="@drawable/ic_dia"/>
+    </LinearLayout>
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:id="@+id/info_img_dinheiro"
+            android:layout_width="@dimen/info_img_dimen"
+            android:layout_height="@dimen/info_img_dimen"
+            android:padding="@dimen/info_paddin"
+            android:src="@drawable/ic_money"/>
+
+        <ImageView
+            android:id="@+id/info_img_celular"
+            android:layout_width="@dimen/info_img_dimen"
+            android:layout_height="@dimen/info_img_dimen"
+            android:padding="@dimen/info_paddin"
+            android:src="@drawable/ic_cel"/>
+
+        <ImageView
+            android:id="@+id/info_img_veiculo"
+            android:layout_width="@dimen/info_img_dimen"
+            android:layout_height="@dimen/info_img_dimen"
+            android:padding="@dimen/info_paddin"
+            android:src="@drawable/ic_veiculo"/>
+
+        <ImageView
+            android:id="@+id/info_img_cartao"
+            android:layout_width="@dimen/info_img_dimen"
+            android:layout_height="@dimen/info_img_dimen"
+            android:padding="@dimen/info_paddin"
+            android:src="@drawable/ic_cartao"/>
+
+        <ImageView
+            android:id="@+id/info_img_carteira"
+            android:layout_width="@dimen/info_img_dimen"
+            android:layout_height="@dimen/info_img_dimen"
+            android:padding="@dimen/info_paddin"
+            android:src="@drawable/ic_carteira"/>
+
+        <ImageView
+            android:id="@+id/info_img_bolsa"
+            android:layout_width="@dimen/info_img_dimen"
+            android:layout_height="@dimen/info_img_dimen"
+            android:padding="@dimen/info_paddin"
+            android:src="@drawable/ic_mochila"/>
+
+        <ImageView
+            android:id="@+id/info_img_bicicleta"
+            android:layout_width="@dimen/info_img_dimen"
+            android:layout_height="@dimen/info_img_dimen"
+            android:padding="@dimen/info_paddin"
+            android:src="@drawable/ic_bicicleta"/>
+
+        <ImageView
+            android:id="@+id/info_img_documentos"
+            android:layout_width="@dimen/info_img_dimen"
+            android:layout_height="@dimen/info_img_dimen"
+            android:padding="@dimen/info_paddin"
+            android:src="@drawable/ic_documento"/>
+
+        <ImageView
+            android:id="@+id/info_img_outros"
+            android:layout_width="@dimen/info_img_dimen"
+            android:layout_height="@dimen/info_img_dimen"
+            android:padding="@dimen/info_paddin"
+            android:src="@drawable/ic_plus"/>
+    </LinearLayout>
+</LinearLayout>

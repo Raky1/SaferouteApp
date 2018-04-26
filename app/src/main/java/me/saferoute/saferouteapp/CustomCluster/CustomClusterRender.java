@@ -1,4 +1,4 @@
-package me.saferoute.saferouteapp.Tools;
+package me.saferoute.saferouteapp.CustomCluster;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -37,23 +37,19 @@ public class CustomClusterRender extends DefaultClusterRenderer{
     protected void onBeforeClusterItemRendered(ClusterItem item, MarkerOptions markerOptions) {
         final BitmapDescriptor markerDescriptor = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED);
 
-        markerOptions.icon(markerDescriptor).snippet("teste");
+        markerOptions.icon(markerDescriptor).snippet(((Ocorrencia) item).toString());
 
     }
 
     @Override
     protected void onClusterRendered(Cluster cluster, Marker marker) {
-        final BitmapDescriptor markerDescriptor = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE);
-
-        marker.setIcon(markerDescriptor);
-        marker.setSnippet("teste");
+        super.onClusterRendered(cluster, marker);
 
     }
 
     @Override
     protected boolean shouldRenderAsCluster(Cluster cluster) {
-        return cluster.getSize() > 5;
+        return cluster.getSize() > 2;
     }
-
 
 }

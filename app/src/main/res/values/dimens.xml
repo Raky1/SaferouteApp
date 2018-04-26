@@ -20,4 +20,16 @@
     <dimen name="select_img_text">20sp</dimen>
     <dimen name="select_img_dimen">35dp</dimen>
 
+    <!-- info -->
+    <dimen name="info_img_dimen">16dp</dimen>
+    <dimen name="info_img_margin">5dp</dimen>
+    <dimen name="info_text_size">15sp</dimen>
+    <dimen name="info_paddin">2dp</dimen>
+
+    <!-- list -->
+    <dimen name="list_img_dimen">16dp</dimen>
+    <dimen name="list_img_margin">5dp</dimen>
+    <dimen name="list_text_size">15sp</dimen>
+    <dimen name="list_paddin">2dp</dimen>
+
 </resources>

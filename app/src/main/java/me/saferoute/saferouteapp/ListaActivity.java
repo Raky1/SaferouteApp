@@ -123,7 +123,7 @@ public class ListaActivity extends Activity implements AsyncResponse {
 
     @Override
     public void processFinish(String result) {
-        //Log.d("INFO", result);
+        Log.d("INFO", result);
         if (comando == 0) {
             try {
                 JSONObject jsonObject = new JSONObject(result);
