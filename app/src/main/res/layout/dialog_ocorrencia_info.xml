@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/white_border_activity_popup">
+
+    <LinearLayout
+        android:layout_gravity="center_vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="5dp">
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/info_window_text_data"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="45dp"
+                android:textSize="@dimen/info_window_text_size"
+                android:text="00/00/0000"/>
+            <TextView
+                android:id="@+id/info_window_text_hora"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/info_window_text_size"
+                android:text="00:00"/>
+            <ImageView
+                android:id="@+id/info_window_img_dia_noite"
+                android:layout_width="@dimen/info_window_img_dimen"
+                android:layout_height="@dimen/info_window_img_dimen"
+                android:padding="@dimen/info_window_paddin"
+                android:src="@drawable/ic_dia"/>
+        </LinearLayout>
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:id="@+id/info_window_img_dinheiro"
+                android:layout_width="@dimen/info_window_img_dimen"
+                android:layout_height="@dimen/info_window_img_dimen"
+                android:padding="@dimen/info_window_paddin"
+                android:src="@drawable/ic_money"/>
+
+            <ImageView
+                android:id="@+id/info_window_img_celular"
+                android:layout_width="@dimen/info_window_img_dimen"
+                android:layout_height="@dimen/info_window_img_dimen"
+                android:padding="@dimen/info_window_paddin"
+                android:src="@drawable/ic_cel"/>
+
+            <ImageView
+                android:id="@+id/info_window_img_veiculo"
+                android:layout_width="@dimen/info_window_img_dimen"
+                android:layout_height="@dimen/info_window_img_dimen"
+                android:padding="@dimen/info_window_paddin"
+                android:src="@drawable/ic_veiculo"/>
+
+            <ImageView
+                android:id="@+id/info_window_img_cartao"
+                android:layout_width="@dimen/info_window_img_dimen"
+                android:layout_height="@dimen/info_window_img_dimen"
+                android:padding="@dimen/info_window_paddin"
+                android:src="@drawable/ic_cartao"/>
+
+            <ImageView
+                android:id="@+id/info_window_img_carteira"
+                android:layout_width="@dimen/info_window_img_dimen"
+                android:layout_height="@dimen/info_window_img_dimen"
+                android:padding="@dimen/info_window_paddin"
+                android:src="@drawable/ic_carteira"/>
+
+            <ImageView
+                android:id="@+id/info_window_img_bolsa"
+                android:layout_width="@dimen/info_window_img_dimen"
+                android:layout_height="@dimen/info_window_img_dimen"
+                android:padding="@dimen/info_window_paddin"
+                android:src="@drawable/ic_mochila"/>
+
+            <ImageView
+                android:id="@+id/info_window_img_bicicleta"
+                android:layout_width="@dimen/info_window_img_dimen"
+                android:layout_height="@dimen/info_window_img_dimen"
+                android:padding="@dimen/info_window_paddin"
+                android:src="@drawable/ic_bicicleta"/>
+
+            <ImageView
+                android:id="@+id/info_window_img_documentos"
+                android:layout_width="@dimen/info_window_img_dimen"
+                android:layout_height="@dimen/info_window_img_dimen"
+                android:padding="@dimen/info_window_paddin"
+                android:src="@drawable/ic_documento"/>
+
+            <ImageView
+                android:id="@+id/info_window_img_outros"
+                android:layout_width="@dimen/info_window_img_dimen"
+                android:layout_height="@dimen/info_window_img_dimen"
+                android:padding="@dimen/info_window_paddin"
+                android:src="@drawable/ic_plus"/>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/info_window_txt_agrecao"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/info_window_agracao_sim"
+            android:textSize="@dimen/info_text_complemento_size"/>
+
+        <TextView
+            android:id="@+id/info_window_txt_boletim"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/info_window_boletim_sim"
+            android:textSize="@dimen/info_text_complemento_size"/>
+
+        <TextView
+            android:id="@+id/info_window_txt_complemento"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/info_text_complemento_size"
+            android:text="-Teste testando testado testadamente teste testando testado testadamente teste testando testado testadamente"/>
+    </LinearLayout>
+</ScrollView>

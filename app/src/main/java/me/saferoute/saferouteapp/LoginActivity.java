@@ -113,7 +113,6 @@ public class LoginActivity extends Activity implements AsyncResponse{
 
     @Override
     public void processFinish(String result) {
-        //Log.d("INFO", result);
         btnLogar.setEnabled(true);
         txtCadastro.setTextColor(getResources().getColor(R.color.link));
         txtCadastro.setEnabled(true);

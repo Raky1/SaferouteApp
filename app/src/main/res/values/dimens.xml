@@ -26,10 +26,20 @@
     <dimen name="info_text_size">15sp</dimen>
     <dimen name="info_paddin">2dp</dimen>
 
+    <!-- info window -->
+    <dimen name="info_window_img_dimen">30dp</dimen>
+    <dimen name="info_window_img_margin">15dp</dimen>
+    <dimen name="info_window_text_size">25sp</dimen>
+    <dimen name="info_text_complemento_size">20sp</dimen>
+    <dimen name="info_window_paddin">5dp</dimen>
+
+
     <!-- list -->
     <dimen name="list_img_dimen">16dp</dimen>
     <dimen name="list_img_margin">5dp</dimen>
     <dimen name="list_text_size">15sp</dimen>
     <dimen name="list_paddin">2dp</dimen>
+
+
 
 </resources>

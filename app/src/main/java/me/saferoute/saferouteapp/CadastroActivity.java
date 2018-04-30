@@ -105,7 +105,6 @@ public class CadastroActivity extends Activity implements AsyncResponse{
 
     @Override
     public void processFinish(String result) {
-        //Log.d("INFO", result);
         btnCadastrar.setEnabled(true);
         if(result.contains("Cadastro_OK")) {
             int id = Integer.parseInt(result.split("\\*")[1]);

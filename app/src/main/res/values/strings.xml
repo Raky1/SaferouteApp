@@ -83,4 +83,11 @@
     <string name="select_bicicleta">bicicleta</string>
     <string name="select_documentos">documentos</string>
     <string name="select_outros">outros</string>
+
+    <!-- more info window ocorrencia -->
+    <string name="info_window_agracao_sim">-Houve agreção</string>
+    <string name="info_window_agracao_nao">-Não houve agreção</string>
+
+    <string name="info_window_boletim_sim">-Foi feito boletim</string>
+    <string name="info_window_boletim_nao">-Não foi feito boletim</string>
 </resources>

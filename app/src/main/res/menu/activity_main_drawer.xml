@@ -25,10 +25,10 @@
                 android:id="@+id/nav_personal"
                 android:icon="@drawable/ic_personalmarker"
                 android:title="@string/nav_personal" />
-            <item
+            <!--item
                 android:id="@+id/nav_home"
                 android:icon="@drawable/ic_homemarker"
-                android:title="@string/nav_home" />
+                android:title="@string/nav_home" /-->
         </menu>
     </item>
 

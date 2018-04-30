@@ -16,7 +16,7 @@ public class RequestData extends AsyncTask<String, Void, String> {
 
     @Override
     protected void onPostExecute(String result) {
-        //Log.d("INFO", "onPostExecute finish");
+        Log.d("INFO", result);
         delegate.processFinish(result);
     }
 }

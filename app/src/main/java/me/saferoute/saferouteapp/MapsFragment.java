@@ -150,6 +150,7 @@ public class MapsFragment extends SupportMapFragment implements OnMapReadyCallba
         mMap.setOnCameraIdleListener(mClusterManager);
         mMap.setOnMarkerClickListener(mClusterManager);
         mMap.setInfoWindowAdapter(mClusterManager.getMarkerManager());
+        mMap.setOnInfoWindowClickListener(mClusterManager);
 
         updateMarkers();
 
@@ -161,25 +162,19 @@ public class MapsFragment extends SupportMapFragment implements OnMapReadyCallba
      */
     @Override
     public void onMapClick(LatLng latLng) {
-        Log.d("INFO", "click on map");
+        //Log.d("INFO", "click on map");
         if(mode==MODE_CLICK_VIEW) {
             this.locationMarker = latLng;
             mMap.clear();
             mMap.addMarker(new MarkerOptions().position(latLng).snippet("Localização"));
             MainActivity mainActivity = (MainActivity) getActivity();
             mainActivity.setEnableBtnConfirmLoc(true, 0);
-            /*MainActivity activity = (MainActivity) getActivity();
-            activity.showROcorrencia(latLng.latitude, latLng.longitude);
-            setMode(0);*/
         } else if (mode==MODE_CLICK_EDIT_VIEW) {
             this.locationMarker = latLng;
             mMap.clear();
             mMap.addMarker(new MarkerOptions().position(latLng).snippet("Localização"));
             MainActivity mainActivity = (MainActivity) getActivity();
             mainActivity.setEnableBtnConfirmLoc(true, 1);
-            /*MainActivity activity = (MainActivity) getActivity();
-            activity.showEditOcorrencia(latLng.latitude, latLng.longitude);
-            setMode(0);*/
         }
     }
 
@@ -228,12 +223,12 @@ public class MapsFragment extends SupportMapFragment implements OnMapReadyCallba
                         @Override
                         public void onComplete(@NonNull Task task) {
                             if (task.isSuccessful()) {
-                                Log.d("INFO", "onComplete: found location");
+                                //Log.d("INFO", "onComplete: found location");
                                 Location currentLocation = (Location) task.getResult();
                                 if(currentLocation != null) // se não estiver procurando ainda
                                     moveCamera(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()), DEFAULT_ZOOM);
                             } else {
-                                Log.d("INFO", "onComplete: found not location");
+                                //Log.d("INFO", "onComplete: found not location");
                             }
                         }
                     });
@@ -305,7 +300,6 @@ public class MapsFragment extends SupportMapFragment implements OnMapReadyCallba
 
     @Override
     public void processFinish(String result) {
-        Log.d("INFO", result);
         try {
             JSONObject jsonObject = new JSONObject(result);
             this.ocorrencias = new ArrayList<Ocorrencia>();

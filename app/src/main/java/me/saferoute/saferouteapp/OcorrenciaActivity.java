@@ -1,5 +1,6 @@
 package me.saferoute.saferouteapp;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
@@ -24,6 +25,8 @@ import android.widget.Toast;
 
 import org.w3c.dom.Text;
 
+import java.sql.Time;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -309,11 +312,32 @@ public class OcorrenciaActivity extends Activity implements AsyncResponse{
     }
 
 
+    @SuppressLint("SimpleDateFormat")
     private String getParametros() {
         ocorrencia = new Ocorrencia();
         //ocorrencia.setId();
         ocorrencia.setLatitude(getIntent().getDoubleExtra("latitude", 0));
         ocorrencia.setLongitude(getIntent().getDoubleExtra("longitude", 0));
+
+
+        try {
+            SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
+            ocorrencia.setData(formato.parse(datePicker.getDayOfMonth()+"/"+(datePicker.getMonth() + 1)+"/"+datePicker.getYear()));
+            formato = new SimpleDateFormat("HH:mm");
+            String hora;
+            if (Build.VERSION.SDK_INT < 23) {
+                hora =(timePicker.getCurrentHour() < 9 ? "0" : "") + timePicker.getCurrentHour() + ":" +
+                        (timePicker.getCurrentHour() < 9 ? "0" : "") + timePicker.getCurrentMinute();
+            } else {
+                hora = (timePicker.getHour() < 9 ? "0" : "") + timePicker.getHour() + ":" +
+                        (timePicker.getMinute() < 9 ? "0" : "") + timePicker.getMinute();
+            }
+
+            ocorrencia.setHora(new Time(formato.parse(hora).getTime()));
+
+        }catch (Exception e) {
+            Log.d("ERROR", e.getMessage());
+        }
         ocorrencia.setDinheiro(pertences[0]);
         ocorrencia.setCelular(pertences[1]);
         ocorrencia.setVeiculo(pertences[2]);
@@ -327,6 +351,7 @@ public class OcorrenciaActivity extends Activity implements AsyncResponse{
         String parametro = "";
 
         if(mode==0) {
+
             parametro = "usuario=" + getIntent().getIntExtra("id", 0) +
                     "&latitude=" + ocorrencia.getLatitude() +
                     "&longitude=" + ocorrencia.getLongitude();
@@ -357,7 +382,7 @@ public class OcorrenciaActivity extends Activity implements AsyncResponse{
                     "&agrecao=" + (spinnerAgrecao.getSelectedItem().toString().equals("Sim") ? "1" : "0") +
                     "&complemento=" + txtComplemento_Ocor.getText().toString() +
                     "&action=inserir";
-            Log.d("INFO", parametro);
+            //Log.d("INFO", parametro);
         } else if(mode == 1){
 
             Ocorrencia ocor = (Ocorrencia) getIntent().getSerializableExtra("ocorrencia");
@@ -402,7 +427,6 @@ public class OcorrenciaActivity extends Activity implements AsyncResponse{
     //
     @Override
     public void processFinish(String result) {
-        Log.d("INFO", result);
         if(mode == 0)
             if(result.contains("Registro_OK")) {
                 Toast.makeText(this, "Ocorrencia Registrada", Toast.LENGTH_SHORT).show();
