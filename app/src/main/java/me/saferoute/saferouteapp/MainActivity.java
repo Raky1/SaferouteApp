@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity
     private HorizontalScrollView scrollViewFiltro;
     private LinearLayout linearLayout;
     private Button btnConfirmaLoc;
-    private ImageView btnGps;
+    private ImageView btnGps, btnThermo;
     private AutoCompleteTextView txtSearch;
 
     //Dialogs
@@ -105,6 +105,17 @@ public class MainActivity extends AppCompatActivity
         //searchs
         txtSearch = (AutoCompleteTextView) findViewById(R.id.txtSearch);
         btnGps = (ImageView) findViewById(R.id.icon_gps);
+        btnThermo = (ImageView) findViewById(R.id.icon_thermo);
+
+        btnThermo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(mapsFragment.getMode() != MapsFragment.MODE_THERMAL_VIEW)
+                    mapsFragment.setMode(MapsFragment.MODE_THERMAL_VIEW);
+                else
+                    mapsFragment.setMode(MapsFragment.MODE_NORMAL_VIEW);
+            }
+        });
 
         //Barra lateral de navegação...
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);

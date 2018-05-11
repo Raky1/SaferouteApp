@@ -348,6 +348,8 @@ public class OcorrenciaActivity extends Activity implements AsyncResponse{
         ocorrencia.setDocumentos(pertences[7]);
         ocorrencia.setOutros(pertences[8]);
 
+        ocorrencia.setComplemento(txtComplemento_Ocor.getText().toString());
+
         String parametro = "";
 
         if(mode==0) {
@@ -380,7 +382,7 @@ public class OcorrenciaActivity extends Activity implements AsyncResponse{
 
                     "&boletim=" + (spinnerBoletim.getSelectedItem().toString().equals("Sim") ? "1" : "0") +
                     "&agrecao=" + (spinnerAgrecao.getSelectedItem().toString().equals("Sim") ? "1" : "0") +
-                    "&complemento=" + txtComplemento_Ocor.getText().toString() +
+                    "&complemento=" + ocorrencia.getComplemento() +
                     "&action=inserir";
             //Log.d("INFO", parametro);
         } else if(mode == 1){
@@ -416,7 +418,7 @@ public class OcorrenciaActivity extends Activity implements AsyncResponse{
 
                     "&boletim=" + (spinnerBoletim.getSelectedItem().toString().equals("Sim") ? 1 : 0) +
                     "&agrecao=" + (spinnerAgrecao.getSelectedItem().toString().equals("Sim") ? 1 : 0) +
-                    "&complemento=" + txtComplemento_Ocor.getText().toString();
+                    "&complemento=" + ocorrencia.getComplemento();
 
             parametro += "&action=update";
         }

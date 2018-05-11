@@ -34,7 +34,7 @@ public class CustomClickInfoWindow implements ClusterManager.OnClusterItemInfoWi
     }
     @Override
     public void onClusterItemInfoWindowClick(Ocorrencia ocorrencia) {
-        Log.d("INFO", "click info window");
+        //Log.d("INFO", "click info window");
 
         SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
         String dia = format.format(ocorrencia.getData());

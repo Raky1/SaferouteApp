@@ -8,6 +8,11 @@
     <dimen name="padding_icon_filtro">15dp</dimen>
     <dimen name="size_icon_filtro">55dp</dimen>
 
+    <!-- main screen -->
+    <dimen name="icon_imgs_map">40dp</dimen>
+    <dimen name="arrows_drawer_horizontal_size">10dp</dimen>
+    <dimen name="arrows_drawer_vertical_size">25dp</dimen>
+
     <!-- dialogs -->
     <dimen name="text_title_size">25sp</dimen>
     <dimen name="text_type_size">20sp</dimen>
@@ -35,11 +40,9 @@
 
 
     <!-- list -->
-    <dimen name="list_img_dimen">16dp</dimen>
-    <dimen name="list_img_margin">5dp</dimen>
-    <dimen name="list_text_size">15sp</dimen>
-    <dimen name="list_paddin">2dp</dimen>
-
-
+    <dimen name="list_img_dimen">20dp</dimen>
+    <dimen name="list_img_margin">12dp</dimen>
+    <dimen name="list_text_size">20sp</dimen>
+    <dimen name="list_paddin">4dp</dimen>
 
 </resources>

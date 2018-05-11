@@ -25,6 +25,7 @@ import java.util.List;
 import me.saferoute.saferouteapp.DAO.AsyncResponse;
 import me.saferoute.saferouteapp.DAO.RequestData;
 import me.saferoute.saferouteapp.Model.Ocorrencia;
+import me.saferoute.saferouteapp.Tools.CustomListViewAdapter;
 
 public class ListaActivity extends Activity implements AsyncResponse {
 
@@ -56,7 +57,7 @@ public class ListaActivity extends Activity implements AsyncResponse {
         int width = dm.widthPixels;
         int height = dm.heightPixels;
 
-        getWindow().setLayout((int)(width*.9),(int)(height*.9));
+        getWindow().setLayout((int)(width*.7),(int)(height*.9));
     }
 
     private void init() {
@@ -105,8 +106,14 @@ public class ListaActivity extends Activity implements AsyncResponse {
             }
         });
 
-        listar();
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_list_item_1);
 
+        adapter.add("Carregando...");
+
+        listView.setAdapter(adapter);
+
+        listar();
     }
 
     private void listar() {
@@ -140,11 +147,7 @@ public class ListaActivity extends Activity implements AsyncResponse {
                         ocorrencias.add(ocor);
                     }
 
-                    ArrayAdapter<Ocorrencia> adapter = new ArrayAdapter<Ocorrencia>(this,
-                            android.R.layout.simple_list_item_1, ocorrencias);
-
-                    listView.setAdapter(adapter);
-
+                    listView.setAdapter(new CustomListViewAdapter(ocorrencias,this));
                 } else {
                     if (jsonObject.getString("erro").contains("error: nada encontrado")) {
 
@@ -160,7 +163,6 @@ public class ListaActivity extends Activity implements AsyncResponse {
                         Log.d("ERROR", "naddaaaaaaaaaa");
                     }
                     Log.d("ERROR", jsonObject.getString("erro"));
-
                 }
             } catch (Exception e) {
                 Log.d("ERROR", e.getMessage());

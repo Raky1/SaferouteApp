@@ -2,6 +2,7 @@ package me.saferoute.saferouteapp;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -18,6 +19,7 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AutoCompleteTextView;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,9 +36,15 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.TileOverlay;
+import com.google.android.gms.maps.model.TileOverlayOptions;
+import com.google.android.gms.maps.model.TileProvider;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.maps.android.clustering.ClusterManager;
+import com.google.maps.android.clustering.algo.GridBasedAlgorithm;
+import com.google.maps.android.heatmaps.Gradient;
+import com.google.maps.android.heatmaps.HeatmapTileProvider;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -66,14 +74,18 @@ public class MapsFragment extends SupportMapFragment implements OnMapReadyCallba
     public static final int MODE_THERMAL_VIEW = 3;
     private int mode = 0;
 
+    private static final int THERMAL_RADIUS = 50;
+
     private static final String URL_OCORRENCIAS = "http://saferoute.me/php/mExecutor/mExecOcorrencia.php";
     private static final String FINE_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION;
     private static final String COARSE_LOCATION = Manifest.permission.ACCESS_COARSE_LOCATION;
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1234;
-    private static final float DEFAULT_ZOOM = 18f;
+    private static final float DEFAULT_ZOOM = 10f;
     private static final LatLngBounds LAT_LNG_BOUNDS = new LatLngBounds(
             new LatLng(-85, -180),
             new LatLng(85, 180));
+
+
 
 
     private GoogleMap mMap;
@@ -83,7 +95,12 @@ public class MapsFragment extends SupportMapFragment implements OnMapReadyCallba
     private PlaceAutoCompleteAdapter mPlaceAutoCompleteAdapter;
     private GeoDataClient mGeoDataClient;
 
+    //heatmap
+    private HeatmapTileProvider mTileProvider;
+    private TileOverlay mTileOverlay;
+
     private RequestData requestData;
+    private ProgressBar progressBar;
     private ClusterManager<Ocorrencia> mClusterManager;
 
     private AutoCompleteTextView txtSearch;
@@ -92,7 +109,8 @@ public class MapsFragment extends SupportMapFragment implements OnMapReadyCallba
     //Ocorrencias e controle de filtro
     private LatLng locationMarker;
     private List<Ocorrencia> ocorrencias;
-    protected boolean[] filtro = {false, false, false, false, false, false, false, false, false};
+    private List<LatLng> ocorLatLng;
+    public boolean[] filtro = {false, false, false, false, false, false, false, false, false};
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -141,9 +159,10 @@ public class MapsFragment extends SupportMapFragment implements OnMapReadyCallba
 
         //Cluster manager
         mClusterManager = new ClusterManager<Ocorrencia>(getContext(), mMap);
-        mClusterManager.setRenderer(new CustomClusterRender(getContext(), mMap, mClusterManager));
+        mClusterManager.setAlgorithm(new GridBasedAlgorithm<Ocorrencia>());
+        mClusterManager.setRenderer(new CustomClusterRender(getContext(), mMap, mClusterManager, this));
         mClusterManager.setOnClusterItemClickListener(new CustomClickItemCluster(getContext()));
-        mClusterManager.setOnClusterClickListener(new CustomClickCluster(getContext()));
+        mClusterManager.setOnClusterClickListener(new CustomClickCluster(getContext(), mMap));
         mClusterManager.getMarkerCollection().setOnInfoWindowAdapter(new CustomInfoViewAdapter(LayoutInflater.from(getContext())));
         mClusterManager.setOnClusterItemInfoWindowClickListener(new CustomClickInfoWindow(LayoutInflater.from(getContext())));
 
@@ -152,6 +171,7 @@ public class MapsFragment extends SupportMapFragment implements OnMapReadyCallba
         mMap.setInfoWindowAdapter(mClusterManager.getMarkerManager());
         mMap.setOnInfoWindowClickListener(mClusterManager);
 
+        progressBar = this.getActivity().findViewById(R.id.main_progressBar);
         updateMarkers();
 
         loadLastLocation();
@@ -182,7 +202,7 @@ public class MapsFragment extends SupportMapFragment implements OnMapReadyCallba
     //-----------------------------------------------move camera
     private void moveCamera(LatLng latLng, float zoom) {
         Log.d("INFO", "moveCamera: moving the camera to : lat: " + latLng.latitude + ", lng: " + latLng.longitude);
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom));
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom));
 
         hideSoftKeyboard();
     }
@@ -264,6 +284,7 @@ public class MapsFragment extends SupportMapFragment implements OnMapReadyCallba
      */
     public void addMarker(Ocorrencia ocorrencia) {
         ocorrencias.add(ocorrencia);
+        ocorLatLng.add(ocorrencia.getPosition());
         showMarkers();
     }
 
@@ -273,36 +294,76 @@ public class MapsFragment extends SupportMapFragment implements OnMapReadyCallba
 
         String parametros = "action=getAll";
 
+        progressBar.setVisibility(View.VISIBLE);
         requestData.execute(URL_OCORRENCIAS, parametros);
     }
 
     public void showMarkers() {
+        mMap.clear();
         mClusterManager.clearItems();
-        if(!filtro[0] && !filtro[1] && !filtro[2] && !filtro[3] && !filtro[4] && !filtro[5] && !filtro[6] && !filtro[7] && !filtro[8]) {
-            mClusterManager.addItems(ocorrencias);
+        mClusterManager.cluster();
+        //manipula ClusterItens ou LATLng
+        if(mode != MODE_THERMAL_VIEW) {
+            if (!filtro[0] && !filtro[1] && !filtro[2] && !filtro[3] && !filtro[4] && !filtro[5] && !filtro[6] && !filtro[7] && !filtro[8]) {
+                mClusterManager.addItems(ocorrencias);
+            } else {
+                for (Ocorrencia o : ocorrencias) {
+                    if ((filtro[0] && o.isDinheiro()) ||
+                            (filtro[1] && o.isCelular()) ||
+                            (filtro[2] && o.isVeiculo()) ||
+                            (filtro[3] && o.isCartao()) ||
+                            (filtro[4] && o.isCarteira()) ||
+                            (filtro[5] && o.isBolsa()) ||
+                            (filtro[6] && o.isBicicleta()) ||
+                            (filtro[7] && o.isDocumentos()) ||
+                            (filtro[8] && o.isOutros()))
+                        mClusterManager.addItem(o);
+                }
+            }
+
+            mClusterManager.cluster();
+
         } else {
-            for(Ocorrencia o : ocorrencias) {
-                if ((filtro[0] && o.isDinheiro()) ||
-                        (filtro[1] && o.isCelular()) ||
-                        (filtro[2] && o.isVeiculo()) ||
-                        (filtro[3] && o.isCartao()) ||
-                        (filtro[4] && o.isCarteira()) ||
-                        (filtro[5] && o.isBolsa()) ||
-                        (filtro[6] && o.isBicicleta()) ||
-                        (filtro[7] && o.isDocumentos()) ||
-                        (filtro[8] && o.isOutros()))
-                    mClusterManager.addItem(o);
+            List<LatLng> ocorLL = new ArrayList<LatLng>();
+
+            if (!filtro[0] && !filtro[1] && !filtro[2] && !filtro[3] && !filtro[4] && !filtro[5] && !filtro[6] && !filtro[7] && !filtro[8]) {
+                ocorLL.addAll(ocorLatLng);
+            } else {
+                for (Ocorrencia o : ocorrencias) {
+                    if ((filtro[0] && o.isDinheiro()) ||
+                            (filtro[1] && o.isCelular()) ||
+                            (filtro[2] && o.isVeiculo()) ||
+                            (filtro[3] && o.isCartao()) ||
+                            (filtro[4] && o.isCarteira()) ||
+                            (filtro[5] && o.isBolsa()) ||
+                            (filtro[6] && o.isBicicleta()) ||
+                            (filtro[7] && o.isDocumentos()) ||
+                            (filtro[8] && o.isOutros()))
+                        ocorLL.add(o.getPosition());
+                }
+            }
+
+            try {
+                mTileProvider = new HeatmapTileProvider.Builder().data(ocorLL).build();
+                mTileProvider.setRadius(THERMAL_RADIUS);
+                mTileOverlay = mMap.addTileOverlay(new TileOverlayOptions().tileProvider(mTileProvider));
+
+            } catch (Exception e) {
+                Log.d("ERROR", e.getMessage());
             }
         }
 
-        mClusterManager.cluster();
+
+
     }
 
     @Override
     public void processFinish(String result) {
+        progressBar.setVisibility(View.GONE);
         try {
             JSONObject jsonObject = new JSONObject(result);
             this.ocorrencias = new ArrayList<Ocorrencia>();
+            this.ocorLatLng = new ArrayList<LatLng>();
 
             if (jsonObject.getBoolean("resultado")) {
                 JSONArray jsonOcorrencias = jsonObject.getJSONArray("ocorrencias");
@@ -314,8 +375,10 @@ public class MapsFragment extends SupportMapFragment implements OnMapReadyCallba
                     ocor.setFromJSON(jsonOcor);
 
                     this.ocorrencias.add(ocor);
-                    showMarkers();
+                    this.ocorLatLng.add(ocor.getPosition());
                 }
+
+                showMarkers();
             } else {
                 if (jsonObject.getString("erro").contains("error: nada encontrado")) {
                     Log.d("ERROR", "naddaaaaaaaaaa");
@@ -357,13 +420,21 @@ public class MapsFragment extends SupportMapFragment implements OnMapReadyCallba
     //-------------------------------0=show Ocorrencia / 1=get Coordenadas--------
     public void setMode(int mode) {
         this.mode = mode;
-        MainActivity mainActivity = (MainActivity) this.getActivity();
+
         if(mode == MODE_NORMAL_VIEW) {
+            MainActivity mainActivity = (MainActivity) this.getActivity();
+
+            if(mTileOverlay != null)
+                mTileOverlay.remove();
             mMap.clear();
-            updateMarkers();
+            showMarkers();
             mainActivity.setBtnConfirmLoc(View.GONE);
             mainActivity.setViewScroll(View.VISIBLE);
         } else if(mode == MODE_CLICK_VIEW || mode == MODE_CLICK_EDIT_VIEW) {
+            MainActivity mainActivity = (MainActivity) this.getActivity();
+
+            if(mTileOverlay != null)
+                mTileOverlay.remove();
             mMap.clear();
             mClusterManager.clearItems();
             mClusterManager.cluster();
@@ -372,11 +443,13 @@ public class MapsFragment extends SupportMapFragment implements OnMapReadyCallba
             mainActivity.setEnableBtnConfirmLoc(false, -1);
             locationMarker = null;
         } else if(mode == MODE_THERMAL_VIEW) {
-
+            showMarkers();
         }
     }
 
-
+    public int getMode() {
+        return mode;
+    }
     public void setTxtSearch(final AutoCompleteTextView txtSearch) {
         this.txtSearch = txtSearch;
         txtSearch.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -394,6 +467,10 @@ public class MapsFragment extends SupportMapFragment implements OnMapReadyCallba
                 return false;
             }
         });
+    }
+
+    public GoogleMap getmMap() {
+        return mMap;
     }
 
     public LatLng getLocationMarker() {
