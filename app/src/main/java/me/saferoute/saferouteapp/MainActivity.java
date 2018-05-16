@@ -13,6 +13,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.view.menu.MenuView;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -102,6 +103,17 @@ public class MainActivity extends AppCompatActivity
      * inicialização
      */
     private void init() {
+
+        ImageView btnListDrawer = (ImageView) findViewById(R.id.icon_list_drawer);
+        btnListDrawer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+                //drawer.setDrawerLockMode(DrawerLayout.SCREEN_STATE_ON);
+                drawer.openDrawer(Gravity.LEFT);
+            }
+        });
+
         //searchs
         txtSearch = (AutoCompleteTextView) findViewById(R.id.txtSearch);
         btnGps = (ImageView) findViewById(R.id.icon_gps);

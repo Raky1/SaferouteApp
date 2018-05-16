@@ -160,7 +160,7 @@ public class MapsFragment extends SupportMapFragment implements OnMapReadyCallba
         //Cluster manager
         mClusterManager = new ClusterManager<Ocorrencia>(getContext(), mMap);
         mClusterManager.setAlgorithm(new GridBasedAlgorithm<Ocorrencia>());
-        mClusterManager.setRenderer(new CustomClusterRender(getContext(), mMap, mClusterManager, this));
+        mClusterManager.setRenderer(new CustomClusterRender(getContext(), mMap, mClusterManager));
         mClusterManager.setOnClusterItemClickListener(new CustomClickItemCluster(getContext()));
         mClusterManager.setOnClusterClickListener(new CustomClickCluster(getContext(), mMap));
         mClusterManager.getMarkerCollection().setOnInfoWindowAdapter(new CustomInfoViewAdapter(LayoutInflater.from(getContext())));
@@ -299,10 +299,12 @@ public class MapsFragment extends SupportMapFragment implements OnMapReadyCallba
     }
 
     public void showMarkers() {
+
         mMap.clear();
         mClusterManager.clearItems();
-        mClusterManager.cluster();
-        //manipula ClusterItens ou LATLng
+        //mClusterManager.cluster();
+
+        /**manipula ClusterItens ou LATLng**/
         if(mode != MODE_THERMAL_VIEW) {
             if (!filtro[0] && !filtro[1] && !filtro[2] && !filtro[3] && !filtro[4] && !filtro[5] && !filtro[6] && !filtro[7] && !filtro[8]) {
                 mClusterManager.addItems(ocorrencias);
@@ -316,14 +318,18 @@ public class MapsFragment extends SupportMapFragment implements OnMapReadyCallba
                             (filtro[5] && o.isBolsa()) ||
                             (filtro[6] && o.isBicicleta()) ||
                             (filtro[7] && o.isDocumentos()) ||
-                            (filtro[8] && o.isOutros()))
+                            (filtro[8] && o.isOutros())) {
                         mClusterManager.addItem(o);
+                        //Log.d("INFO", o.toString());
+                    }
                 }
             }
 
             mClusterManager.cluster();
 
         } else {
+            mClusterManager.cluster();
+
             List<LatLng> ocorLL = new ArrayList<LatLng>();
 
             if (!filtro[0] && !filtro[1] && !filtro[2] && !filtro[3] && !filtro[4] && !filtro[5] && !filtro[6] && !filtro[7] && !filtro[8]) {
@@ -378,6 +384,7 @@ public class MapsFragment extends SupportMapFragment implements OnMapReadyCallba
                     this.ocorLatLng.add(ocor.getPosition());
                 }
 
+                //mClusterManager.addItems(ocorrencias);
                 showMarkers();
             } else {
                 if (jsonObject.getString("erro").contains("error: nada encontrado")) {
@@ -415,9 +422,9 @@ public class MapsFragment extends SupportMapFragment implements OnMapReadyCallba
 
 
 
-    /**##########################################################################Outros##########################################################################**/
+    /**##########################################################################Outros##########################################################################
 
-    //-------------------------------0=show Ocorrencia / 1=get Coordenadas--------
+    -------------------------------0=show Ocorrencia / 1=get Coordenadas--------**/
     public void setMode(int mode) {
         this.mode = mode;
 
@@ -460,7 +467,7 @@ public class MapsFragment extends SupportMapFragment implements OnMapReadyCallba
                         || keyEvent.getAction() == KeyEvent.ACTION_DOWN
                         || keyEvent.getAction() == KeyEvent.KEYCODE_ENTER) {
 
-                    //procura localização
+                    /**procura localização**/
                     geoLocate();
                 }
 
@@ -511,8 +518,8 @@ public class MapsFragment extends SupportMapFragment implements OnMapReadyCallba
 
     /**
      * Ações da activiti ou sistema
+     * verifica se google api falha
      */
-    //verifica se google api falha
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
         Log.d("INFO", "onConnectionFailed: falha");

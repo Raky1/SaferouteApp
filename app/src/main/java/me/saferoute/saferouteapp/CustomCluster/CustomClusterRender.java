@@ -27,22 +27,19 @@ import me.saferoute.saferouteapp.Model.Ocorrencia;
 public class CustomClusterRender extends DefaultClusterRenderer{
 
     private final Context mContext;
-    private final MapsFragment fragment;
 
     //private final int[] COLORS = {Color.BLUE, Color.RED, Color.GREEN, Color.GRAY, Color.YELLOW, Color.MAGENTA, Color.BLACK, Color.CYAN, Color.WHITE};
 
-    public CustomClusterRender(Context context, GoogleMap map, ClusterManager clusterManager, MapsFragment fragment) {
+    public CustomClusterRender(Context context, GoogleMap map, ClusterManager clusterManager) {
         super(context, map, clusterManager);
         mContext = context;
-        this.fragment = fragment;
     }
 
     @Override
     protected void onBeforeClusterItemRendered(ClusterItem item, MarkerOptions markerOptions) {
         final BitmapDescriptor markerDescriptor = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED);
 
-
-        //markerOptions.visible(false);
+        //markerOptions.visible(((Ocorrencia) item).isVisible());
         markerOptions.icon(markerDescriptor).snippet(((Ocorrencia) item).toString());
 
     }
@@ -50,7 +47,6 @@ public class CustomClusterRender extends DefaultClusterRenderer{
     @Override
     protected void onClusterRendered(Cluster cluster, Marker marker) {
         super.onClusterRendered(cluster, marker);
-
     }
 
     @Override

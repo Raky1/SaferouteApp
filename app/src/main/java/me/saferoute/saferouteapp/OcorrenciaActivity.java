@@ -73,7 +73,7 @@ public class OcorrenciaActivity extends Activity implements AsyncResponse{
         int width = dm.widthPixels;
         int height = dm.heightPixels;
 
-        getWindow().setLayout((int)(width*.8),(int)(height*.8));
+        getWindow().setLayout((int)(width*.8),(int)(height*.6));
     }
 
     private void init() {

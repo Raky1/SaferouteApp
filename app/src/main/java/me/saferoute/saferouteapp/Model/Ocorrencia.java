@@ -28,6 +28,11 @@ public class Ocorrencia implements Serializable, ClusterItem {
     private Time hora;
     private boolean dinheiro, celular, veiculo, cartao, carteira, bolsa, bicicleta, documentos, outros;
     private boolean boletim, agrecao;
+    private boolean visible;
+
+    public Ocorrencia() {
+        visible = true;
+    }
 
     @Override
     public LatLng getPosition() {
@@ -96,39 +101,6 @@ public class Ocorrencia implements Serializable, ClusterItem {
         }
     }
 
-    public void setPartialFromJSON(JSONObject jsonOcor) {
-        try {
-            id = jsonOcor.getInt("id");
-            latitude =jsonOcor.getDouble("latitude");
-            longitude = jsonOcor.getDouble("longitude");
-
-            dinheiro = jsonOcor.getString("dinheiro").equals("1");
-            celular = jsonOcor.getString("celular").equals("1");
-            veiculo = jsonOcor.getString("veiculo").equals("1");
-            cartao = jsonOcor.getString("cartao").equals("1");
-            carteira = jsonOcor.getString("carteira").equals("1");
-            bolsa = jsonOcor.getString("bolsa").equals("1");
-            bicicleta = jsonOcor.getString("bicicleta").equals("1");
-            documentos = jsonOcor.getString("documentos").equals("1");
-            outros = jsonOcor.getString("outros").equals("1");
-
-
-            /*SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-            data = new java.sql.Date(format.parse(jsonOcor.getString("dia")).getTime());
-
-            format = new SimpleDateFormat("HH:mm");
-            hora = new java.sql.Time(format.parse(jsonOcor.getString("hora")).getTime());
-
-            boletim = jsonOcor.getString("boletim").equals("1");
-            agrecao = jsonOcor.getString("agrecao").equals("1");
-
-            complemento = jsonOcor.getString("complemento");*/
-
-        } catch (Exception e) {
-            Log.d("ERROR", e.getMessage());
-        }
-    }
-
 
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
@@ -185,4 +157,6 @@ public class Ocorrencia implements Serializable, ClusterItem {
     public void setAgrecao(boolean agrecao) { this.agrecao = agrecao; }
 
 
+    public boolean isVisible() { return visible; }
+    public void setVisible(boolean visible) { this.visible = visible; }
 }

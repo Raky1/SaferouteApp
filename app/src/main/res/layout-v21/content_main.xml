@@ -24,6 +24,7 @@
         android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
         android:scaleType="fitXY"
+        android:elevation="10dp"
         android:background="@drawable/white_border_search"
         android:src="@drawable/ic_lines_drawer"/>
 
@@ -35,6 +36,7 @@
         android:layout_marginTop="10dp"
         android:layout_marginRight="10dp"
         android:layout_marginLeft="10dp"
+        android:elevation="10dp"
         android:background="@drawable/white_border_search">
 
         <ImageView
